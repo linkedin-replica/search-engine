@@ -62,12 +62,11 @@ public class DatabaseConnection {
 	 * Instantiate ArangoDB
 	 * @return
 	 */
-	public ArangoDB instantiateArrangoDB(){
-		return 
-					new ArangoDB.Builder()
-											.user(properties.getProperty("arangodb.user"))
-											.password(properties.getProperty("arangodb.password"))
-											.build();
+	private ArangoDB instantiateArrangoDB(){
+		return new ArangoDB.Builder()
+				.user(properties.getProperty("arangodb.user"))
+				.password(properties.getProperty("arangodb.password"))
+				.build();
 	}
 
 	/**
@@ -77,15 +76,13 @@ public class DatabaseConnection {
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
 	 */
-	public Connection instantiateMysqlDB() throws SQLException, ClassNotFoundException{
+	private Connection instantiateMysqlDB() throws SQLException, ClassNotFoundException{
 		// This will load the MySQL driver, each DB has its own driver
         Class.forName(properties.getProperty("mysql.database-driver"));
         // create new connection and return it
-		return 
-				DriverManager.getConnection(properties.getProperty("mysql.url"),
-																	 properties.getProperty("mysql.userName"),
-																	 properties.getProperty("mysql.password")
-																);
+		return DriverManager.getConnection(properties.getProperty("mysql.url"),
+				properties.getProperty("mysql.userName"),
+				properties.getProperty("mysql.password"));
 	}
 	
 	
