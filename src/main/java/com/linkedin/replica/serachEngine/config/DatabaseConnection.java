@@ -78,8 +78,8 @@ public class DatabaseConnection {
 	 */
 	private Connection instantiateMysqlDB() throws SQLException, ClassNotFoundException{
 		// This will load the MySQL driver, each DB has its own driver
-        Class.forName(properties.getProperty("mysql.database-driver"));
-        // create new connection and return it
+		Class.forName(properties.getProperty("mysql.database-driver"));
+		// create new connection and return it
 		return DriverManager.getConnection(properties.getProperty("mysql.url"),
 				properties.getProperty("mysql.userName"),
 				properties.getProperty("mysql.password"));
@@ -96,9 +96,5 @@ public class DatabaseConnection {
 	
 	public Jedis getRedis() {
 		return redis;
-	}
-
-	public static void main(String[] args) throws FileNotFoundException, IOException, SQLException, ClassNotFoundException {
-		DatabaseConnection dbConn = DatabaseConnection.getInstance();
 	}
 }
