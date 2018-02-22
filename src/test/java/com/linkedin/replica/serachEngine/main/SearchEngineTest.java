@@ -1,8 +1,11 @@
-package com.linkedin.replica.serachEngine.databaseHandlers;
+package com.linkedin.replica.serachEngine.main;
+
+import static org.junit.Assert.assertEquals;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.AfterClass;
@@ -11,36 +14,41 @@ import org.junit.Test;
 
 import com.arangodb.ArangoDBException;
 import com.linkedin.replica.serachEngine.databaseHandler.impl.ArangoHandler;
-import com.linkedin.replica.serachEngine.main.SearchEngine;
+import com.linkedin.replica.serachEngine.databaseHandlers.DatabaseHandler;
+import com.linkedin.replica.serachEngine.databaseHandlers.DatabaseSeed;
 import com.linkedin.replica.serachEngine.models.Company;
 import com.linkedin.replica.serachEngine.models.Job;
 import com.linkedin.replica.serachEngine.models.Post;
 import com.linkedin.replica.serachEngine.models.User;
 import com.linkedin.replica.serachEngine.services.SearchService;
 
-import static org.junit.Assert.assertEquals;
-
-public class ArangoHandlerTest {
+public class SearchEngineTest {
 	private static DatabaseSeed dbSeed;
+	private static SearchService service;
 	
 	@BeforeClass
 	public static void setup() throws ClassNotFoundException, IOException, SQLException{
 		// startup SearchEngine 
 		String[] args = {"src/main/resources/database_config", "src/main/resources/command_config", "src/main/resources/arango_names"};
 		SearchEngine.start(args);
+		service = new SearchService();
 		
 		dbSeed = new DatabaseSeed();
 		dbSeed.insertUsers();
 		dbSeed.insertCompanies();
 		dbSeed.insertJobs();
 		dbSeed.insertPosts();
+		
+		
 	}
 	
 	@Test
-	public void testSearchUsers() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException{
+	public void testSearchUsers() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException{
+		System.out.println("er");
 		String searchKey = "hm";
-		DatabaseHandler dbHandler = new ArangoHandler();
-		List<User> results = dbHandler.searchUsers(searchKey);
+		HashMap<String,String> htbl =  new HashMap<String, String>();
+		htbl.put("searchKey", searchKey);
+		List<User> results = (List<User>) service.serve("search.user",htbl).get("results");
 		
 		boolean check = false;
 		for(User user : results){
@@ -56,10 +64,11 @@ public class ArangoHandlerTest {
 	}
 	
 	@Test
-	public void testSearchCompanies() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException{
+	public void testSearchCompanies() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException{
 		String searchKey = "Goo";
-		DatabaseHandler dbHandler = new ArangoHandler();
-		List<Company> results = dbHandler.searchCompanies(searchKey);
+		HashMap<String,String> htbl =  new HashMap<String, String>();
+		htbl.put("searchKey", searchKey);
+		List<Company> results = (List<Company>) service.serve("search.company",htbl).get("results");
 		
 		boolean check = false;
 		for(Company company : results){
@@ -72,10 +81,12 @@ public class ArangoHandlerTest {
 	}
 	
 	@Test
-	public void testSearchPosts() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException{
+	public void testSearchPosts() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException{
 		String searchKey = "Lorem";
-		DatabaseHandler dbHandler = new ArangoHandler();
-		List<Post> results = dbHandler.searchPosts(searchKey);
+		HashMap<String,String> htbl =  new HashMap<String, String>();
+		htbl.put("searchKey", searchKey);
+		List<Post> results = (List<Post>) service.serve("search.post",htbl).get("results");
+
 		searchKey = searchKey.toLowerCase();
 		boolean check = false;
 		for(Post post : results){
@@ -90,10 +101,12 @@ public class ArangoHandlerTest {
 	
 	
 	@Test
-	public void testSearchJobs() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException{
+	public void testSearchJobs() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException{
 		String searchKey = "Developer";
-		DatabaseHandler dbHandler = new ArangoHandler();
-		List<Job> results = dbHandler.searchJobs(searchKey);
+		
+		HashMap<String,String> htbl =  new HashMap<String, String>();
+		htbl.put("searchKey", searchKey);
+		List<Job> results = (List<Job>) service.serve("search.job",htbl).get("results");
 		
 		boolean check = false;
 		for(Job job : results){
@@ -113,5 +126,4 @@ public class ArangoHandlerTest {
 		dbSeed.deleteAllPosts();
 		SearchEngine.shutdown();
 	}
-	
 }

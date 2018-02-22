@@ -12,6 +12,7 @@ import java.util.Properties;
 import com.arangodb.ArangoCursor;
 import com.arangodb.ArangoDB;
 import com.arangodb.util.MapBuilder;
+import com.linkedin.replica.serachEngine.config.Configuration;
 import com.linkedin.replica.serachEngine.config.DatabaseConnection;
 import com.linkedin.replica.serachEngine.databaseHandlers.DatabaseHandler;
 import com.linkedin.replica.serachEngine.models.Company;
@@ -29,7 +30,7 @@ public class ArangoHandler implements DatabaseHandler{
 	public ArangoHandler() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException{
 		arangoDB = DatabaseConnection.getInstance().getArangodb();
 		properties = new Properties();
-		properties.load(new FileInputStream("src/main/resources/arango_names"));
+		properties.load(new FileInputStream(Configuration.getInstance().getArangoNamesConfigPath()));
 	}
 	
 	/**

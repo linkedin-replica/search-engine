@@ -26,7 +26,7 @@ public class SearchService {
 	
 	public SearchService() throws FileNotFoundException, IOException{
 		prop = new Properties();
-		prop.load(new FileInputStream("src/main/resources/command_config"));
+		prop.load(new FileInputStream(Configuration.getInstance().getCommandConfigPath()));
 		commandsPackageName = "com.linkedin.replica.serachEngine.commands.impl";
 		dbHandlerPackageName = "com.linkedin.replica.serachEngine.databaseHandler.impl";
 	}
@@ -51,12 +51,5 @@ public class SearchService {
 			
 			// execute command
 			return command.execute();
-	}
-	
-	public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-		SearchService service = new SearchService();
-		HashMap<String,String> htbl =  new HashMap<String, String>();
-		htbl.put("searchKey", "Goo");
-		System.out.println(service.serve("search.company",htbl));
 	}
 }

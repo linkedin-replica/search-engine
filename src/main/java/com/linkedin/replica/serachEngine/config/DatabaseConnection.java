@@ -26,11 +26,11 @@ public class DatabaseConnection {
 	
 	private DatabaseConnection() throws FileNotFoundException, IOException, SQLException, ClassNotFoundException{
 		properties = new Properties();
-		properties.load(new FileInputStream("src/main/resources/database_config"));
+		properties.load(new FileInputStream(Configuration.getInstance().getDatabaseConfigPath()));
 		
 		arangodb = getNewArrangoDB();
 		mysqlConn = getNewMysqlDB();
-		redis = new Jedis();
+//		redis = new Jedis();
 	}
 	
 	/**
@@ -89,6 +89,16 @@ public class DatabaseConnection {
 				properties.getProperty("mysql.password"));
 	}
 	
+	public void closeConnections() throws SQLException{
+		if(arangodb != null)
+			arangodb.shutdown();
+		
+		if(redis != null)
+			redis.shutdown();
+		
+		if(mysqlConn != null)
+			mysqlConn.close();
+	}
 	
 	public ArangoDB getArangodb() {
 		return arangodb;
