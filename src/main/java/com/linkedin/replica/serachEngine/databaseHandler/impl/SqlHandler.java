@@ -13,24 +13,23 @@ import com.linkedin.replica.serachEngine.models.Post;
  */
 public class SqlHandler implements DatabaseHandler {
 
-	public List<User> searchUsers() {
+	public List<User> searchUsers(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public List<Company> searchCompanies() {
+	public List<Company> searchCompanies(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public List<Post> searchPosts() {
+	public List<Post> searchPosts(String txt) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public List<Job> searchJobs() {
+	public List<Job> searchJobs(String title) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

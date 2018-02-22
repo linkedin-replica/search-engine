@@ -17,26 +17,26 @@ public interface DatabaseHandler {
 	 * @return
 	 * 	return list of users
 	 */
-	public List<User> searchUsers();
+	public List<User> searchUsers(String name);
 	
 	/**
 	 * Search for companies 
 	 * @return
 	 * 	return list of companies
 	 */
-	public List<Company> searchCompanies();
+	public List<Company> searchCompanies(String name);
 	
 	/**
 	 * Search for posts 
 	 * @return
 	 * 	return list of posts
 	 */
-	public List<Post> searchPosts();
+	public List<Post> searchPosts(String txt);
 	
 	/**
 	 * Search for jobs 
 	 * @return
 	 * 	return list of jobs
 	 */
-	public List<Job> searchJobs();
+	public List<Job> searchJobs(String title);
 }
