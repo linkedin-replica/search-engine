@@ -26,7 +26,7 @@ public class DatabaseConnection {
 	
 	private DatabaseConnection() throws FileNotFoundException, IOException, SQLException, ClassNotFoundException{
 		properties = new Properties();
-		properties.load(new FileInputStream("config"));
+		properties.load(new FileInputStream("src/main/resources/database_config"));
 		
 		arangodb = getNewArrangoDB();
 		mysqlConn = getNewMysqlDB();

@@ -99,12 +99,12 @@ public class ArangoHandlerTest {
 		}
 	}
 	
-	@AfterClass
-	public static void tearDown() throws ArangoDBException, FileNotFoundException, ClassNotFoundException, IOException, SQLException{
-		dbSeed.deleteAllUsers();
-		dbSeed.deleteAllCompanies();
-		dbSeed.deleteAllJobs();
-		dbSeed.deleteAllPosts();
-	}
+//	@AfterClass
+//	public static void tearDown() throws ArangoDBException, FileNotFoundException, ClassNotFoundException, IOException, SQLException{
+//		dbSeed.deleteAllUsers();
+//		dbSeed.deleteAllCompanies();
+//		dbSeed.deleteAllJobs();
+//		dbSeed.deleteAllPosts();
+//	}
 	
 }

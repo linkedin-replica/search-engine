@@ -11,10 +11,8 @@ import com.linkedin.replica.serachEngine.databaseHandlers.DatabaseHandler;
  */
 public class SearchJobsCommand extends Command {
 
-	public SearchJobsCommand(HashMap<String, String> args, DatabaseHandler dbHandler) {
-		super(args, dbHandler);
-	}
-
+	public SearchJobsCommand(){super();}
+	
 	@Override
 	public LinkedHashMap<String, Object> execute() {
 		// create a LinkedHashMap to hold results 

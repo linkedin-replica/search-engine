@@ -79,4 +79,11 @@ public class Company {
 		this.yearFounded = yearFounded;
 	}
 
+	@Override
+	public String toString() {
+		return "Company [companyID=" + companyID + ", companyName="
+				+ companyName + "]";
+	}
+
+	
 }

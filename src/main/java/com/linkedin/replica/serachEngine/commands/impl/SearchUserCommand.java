@@ -11,9 +11,7 @@ import com.linkedin.replica.serachEngine.databaseHandlers.DatabaseHandler;
  */
 public class SearchUserCommand extends Command{
 
-	public SearchUserCommand(HashMap<String, String> args, DatabaseHandler dbHandler) {
-		super(args, dbHandler);
-	}
+	public SearchUserCommand(){super();}
 
 	@Override
 	public LinkedHashMap<String, Object> execute() {

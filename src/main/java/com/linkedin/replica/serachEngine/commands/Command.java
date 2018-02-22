@@ -12,15 +12,22 @@ public abstract class Command {
     protected HashMap<String, String> args;
     protected DatabaseHandler dbHandler;
     
-    public Command(HashMap<String, String> args, DatabaseHandler dbHandler) {
-        this.args = args;
-        this.dbHandler = dbHandler;
-    }
-
+    public Command(){}
+    
     /**
      * Execute the command
      * @return The output (if any) of the command
      * 	LinkedHashMap preserve order of insertion so it will preserve this order when parsing to JSON
      */
     public abstract LinkedHashMap<String, Object> execute();
+
+	public void setArgs(HashMap<String, String> args) {
+		this.args = args;
+	}
+
+	public void setDbHandler(DatabaseHandler dbHandler) {
+		this.dbHandler = dbHandler;
+	}
+    
+    
 }

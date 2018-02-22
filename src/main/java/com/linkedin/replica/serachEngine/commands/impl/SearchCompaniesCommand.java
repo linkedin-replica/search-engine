@@ -9,12 +9,9 @@ import com.linkedin.replica.serachEngine.databaseHandlers.DatabaseHandler;
  *  Implementation of command design patterns for search for companies functionality
  */
 public class SearchCompaniesCommand extends Command{
-
-
-	public SearchCompaniesCommand(HashMap<String, String> args, DatabaseHandler dbHandler) {
-		super(args, dbHandler);
-	}
-
+	
+	public SearchCompaniesCommand (){super();}
+	
 	@Override
 	public LinkedHashMap<String, Object> execute() {
 		// create a LinkedHashMap to hold results 
