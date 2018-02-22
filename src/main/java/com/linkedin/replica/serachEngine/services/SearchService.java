@@ -28,7 +28,7 @@ public class SearchService {
 		prop = new Properties();
 		prop.load(new FileInputStream(Configuration.getInstance().getCommandConfigPath()));
 		commandsPackageName = "com.linkedin.replica.serachEngine.commands.impl";
-		dbHandlerPackageName = "com.linkedin.replica.serachEngine.databaseHandler.impl";
+		dbHandlerPackageName = "com.linkedin.replica.serachEngine.databaseHandlers.impl";
 	}
 		
 	public  LinkedHashMap<String, Object> serve(String commandName, HashMap<String, String> args) throws ClassNotFoundException, InstantiationException, IllegalAccessException{
