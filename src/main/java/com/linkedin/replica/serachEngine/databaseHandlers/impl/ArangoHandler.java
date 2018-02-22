@@ -1,4 +1,4 @@
-package com.linkedin.replica.serachEngine.databaseHandler.impl;
+package com.linkedin.replica.serachEngine.databaseHandlers.impl;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

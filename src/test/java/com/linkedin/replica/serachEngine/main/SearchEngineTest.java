@@ -13,9 +13,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.arangodb.ArangoDBException;
-import com.linkedin.replica.serachEngine.databaseHandler.impl.ArangoHandler;
 import com.linkedin.replica.serachEngine.databaseHandlers.DatabaseHandler;
 import com.linkedin.replica.serachEngine.databaseHandlers.DatabaseSeed;
+import com.linkedin.replica.serachEngine.databaseHandlers.impl.ArangoHandler;
 import com.linkedin.replica.serachEngine.models.Company;
 import com.linkedin.replica.serachEngine.models.Job;
 import com.linkedin.replica.serachEngine.models.Post;
