@@ -1,14 +1,17 @@
-package com.linkedin.replica.serachEngine.daos.impl;
+package com.linkedin.replica.serachEngine.databaseHandler.impl;
 
 import java.util.List;
 
-import com.linkedin.replica.serachEngine.daos.SearchDao;
+import com.linkedin.replica.serachEngine.databaseHandlers.DatabaseHandler;
 import com.linkedin.replica.serachEngine.models.Company;
 import com.linkedin.replica.serachEngine.models.Job;
 import com.linkedin.replica.serachEngine.models.User;
 import com.linkedin.replica.serachEngine.models.Post;
 
-public class RedisSearchDAO implements SearchDao{
+/**
+ * Implementation of SqlHandler which is responsible for serving specific request from SQL database
+ */
+public class SqlHandler implements DatabaseHandler {
 
 	public List<User> searchUsers() {
 		// TODO Auto-generated method stub

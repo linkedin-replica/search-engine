@@ -1,4 +1,4 @@
-package com.linkedin.replica.serachEngine.daos;
+package com.linkedin.replica.serachEngine.databaseHandlers;
 
 import java.util.List;
 
@@ -8,9 +8,9 @@ import com.linkedin.replica.serachEngine.models.User;
 import com.linkedin.replica.serachEngine.models.Post;
 
 /**
- * Search Data Access Object interface
+ * Database Handler is responsible for dealing with storage engine to handle specific requests
  */
-public interface SearchDao {
+public interface DatabaseHandler {
 	
 	/**
 	 * Search for users 
