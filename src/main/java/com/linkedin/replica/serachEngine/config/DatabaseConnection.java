@@ -12,6 +12,10 @@ import redis.clients.jedis.Jedis;
 
 import com.arangodb.ArangoDB;
 
+/**
+ *  DatabaseConnection is a singleton class responsible for reading database config file and initiate 
+ *  connections to databases
+ */
 public class DatabaseConnection {
 	private ArangoDB arangodb; 
 	private Connection mysqlConn;
@@ -22,11 +26,11 @@ public class DatabaseConnection {
 	
 	private DatabaseConnection() throws FileNotFoundException, IOException, SQLException, ClassNotFoundException{
 		properties = new Properties();
-		properties.load(new FileInputStream("config"));
+		properties.load(new FileInputStream(Configuration.getInstance().getDatabaseConfigPath()));
 		
-		arangodb = instantiateArrangoDB();
-		mysqlConn = instantiateMysqlDB();
-		redis = new Jedis();
+		arangodb = getNewArrangoDB();
+		mysqlConn = getNewMysqlDB();
+//		redis = new Jedis();
 	}
 	
 	/**
@@ -62,7 +66,7 @@ public class DatabaseConnection {
 	 * Instantiate ArangoDB
 	 * @return
 	 */
-	private ArangoDB instantiateArrangoDB(){
+	private ArangoDB getNewArrangoDB(){
 		return new ArangoDB.Builder()
 				.user(properties.getProperty("arangodb.user"))
 				.password(properties.getProperty("arangodb.password"))
@@ -76,7 +80,7 @@ public class DatabaseConnection {
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
 	 */
-	private Connection instantiateMysqlDB() throws SQLException, ClassNotFoundException{
+	private Connection getNewMysqlDB() throws SQLException, ClassNotFoundException{
 		// This will load the MySQL driver, each DB has its own driver
 		Class.forName(properties.getProperty("mysql.database-driver"));
 		// create new connection and return it
@@ -85,6 +89,16 @@ public class DatabaseConnection {
 				properties.getProperty("mysql.password"));
 	}
 	
+	public void closeConnections() throws SQLException{
+		if(arangodb != null)
+			arangodb.shutdown();
+		
+		if(redis != null)
+			redis.shutdown();
+		
+		if(mysqlConn != null)
+			mysqlConn.close();
+	}
 	
 	public ArangoDB getArangodb() {
 		return arangodb;
