@@ -55,11 +55,11 @@ public class ArangoHandler implements DatabaseHandler{
 		Map<String, Object> bindVars = new MapBuilder().put("name", "%"+name+"%").get();
 		
 		// execute query
-        ArangoCursor<User> cursor = arangoDB.db(dbName).query(query, bindVars, null, User.class);
-        
-        // add results to result list and return it
-        ArrayList<User> result = new ArrayList<User>();
-    	cursor.forEachRemaining( user -> { result.add(user); });
+		ArangoCursor<User> cursor = arangoDB.db(dbName).query(query, bindVars, null, User.class);
+
+		// add results to result list and return it
+		ArrayList<User> result = new ArrayList<User>();
+		cursor.forEachRemaining( user -> { result.add(user); });
 		return result;
 	}
 	
@@ -82,12 +82,12 @@ public class ArangoHandler implements DatabaseHandler{
 		
 		// bind variables in query
 		Map<String, Object> bindVars = new MapBuilder().put("name", "%"+name+"%").get();
-		
+
 		// execute query
-        ArangoCursor<Company> cursor = arangoDB.db(dbName).query(query, bindVars, null, Company.class);
-        // add results to result list and return it
-        ArrayList<Company> result = new ArrayList<Company>();
-    	cursor.forEachRemaining( company -> { result.add(company); });
+		ArangoCursor<Company> cursor = arangoDB.db(dbName).query(query, bindVars, null, Company.class);
+		// add results to result list and return it
+		ArrayList<Company> result = new ArrayList<Company>();
+		cursor.forEachRemaining( company -> { result.add(company); });
 		return result;
 	}
 	
@@ -99,24 +99,24 @@ public class ArangoHandler implements DatabaseHandler{
 	public List<Post> searchPosts(String txt) {
 		String dbName = properties.getProperty("db.name");
 		String collectionName = properties.getProperty("collection.post.name");
-		
+
 		// lowerCase name to avoid case sensitive search
 		txt = txt.toLowerCase();
-		
+
 		// query for getting user if there is a match of his/her firstName or lastName with input
 		String query = "FOR t IN "+ collectionName +" FILTER "
 				+ "LOWER(t.text) LIKE @txt "
 				+ "RETURN t";
-		
+
 		// bind variables in query
 		Map<String, Object> bindVars = new MapBuilder().put("txt", "%"+txt+"%").get();
-		
+
 		// execute query
-        ArangoCursor<Post> cursor = arangoDB.db(dbName).query(query, bindVars, null, Post.class);
-        
-        // add results to result list and return it
-        ArrayList<Post> result = new ArrayList<Post>();
-    	cursor.forEachRemaining( post -> { result.add(post); });
+		ArangoCursor<Post> cursor = arangoDB.db(dbName).query(query, bindVars, null, Post.class);
+
+		// add results to result list and return it
+		ArrayList<Post> result = new ArrayList<Post>();
+		cursor.forEachRemaining( post -> { result.add(post); });
 		return result;
 	}
 	
@@ -136,16 +136,16 @@ public class ArangoHandler implements DatabaseHandler{
 		String query = "FOR t IN "+ collectionName +" FILTER "
 				+ "LOWER(t.title) LIKE @title "
 				+ "RETURN t";
-		
+
 		// bind variables in query
 		Map<String, Object> bindVars = new MapBuilder().put("title", "%"+title+"%").get();
-		
+
 		// execute query
-        ArangoCursor<Job> cursor = arangoDB.db(dbName).query(query, bindVars, null, Job.class);
+		ArangoCursor<Job> cursor = arangoDB.db(dbName).query(query, bindVars, null, Job.class);
         
         // add results to result list and return it
-        ArrayList<Job> result = new ArrayList<Job>();
-    	cursor.forEachRemaining( job -> { result.add(job); });
+		ArrayList<Job> result = new ArrayList<Job>();
+		cursor.forEachRemaining( job -> { result.add(job); });
 		return result;
 	}	
 }
