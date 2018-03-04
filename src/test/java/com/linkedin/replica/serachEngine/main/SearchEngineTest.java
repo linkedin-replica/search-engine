@@ -27,10 +27,10 @@ public class SearchEngineTest {
 	private static SearchService service;
 	
 	@BeforeClass
-	public static void setup() throws ClassNotFoundException, IOException, SQLException{
+	public static void setup() throws ClassNotFoundException, IOException, SQLException, InterruptedException{
 		// startup SearchEngine 
 		String[] args = {"src/main/resources/database_config", "src/main/resources/command_config", "src/main/resources/arango_names"};
-		SearchEngine.start(args);
+		SearchEngine.testingStart(args);
 		service = new SearchService();
 		
 		dbSeed = new DatabaseSeed();

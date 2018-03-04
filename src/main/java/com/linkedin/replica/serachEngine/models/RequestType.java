@@ -1,10 +1,13 @@
 package com.linkedin.replica.serachEngine.models;
 
+/**
+ * Type of requests.
+ */
 public enum RequestType {
 	USERS("search.user"), 
 	COMPANIES("search.company"), 
-	JOBS("search.post"), 
-	POSTS("search.job");
+	JOBS("search.job"), 
+	POSTS("search.post");
 	
 	private String commandName;
 	

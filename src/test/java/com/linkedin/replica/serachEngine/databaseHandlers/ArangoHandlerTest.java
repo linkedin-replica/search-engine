@@ -24,10 +24,10 @@ public class ArangoHandlerTest {
 	private static DatabaseSeed dbSeed;
 	
 	@BeforeClass
-	public static void setup() throws ClassNotFoundException, IOException, SQLException{
+	public static void setup() throws ClassNotFoundException, IOException, SQLException, InterruptedException{
 		// startup SearchEngine 
 		String[] args = {"src/main/resources/database_config", "src/main/resources/command_config", "src/main/resources/arango_names"};
-		SearchEngine.start(args);
+		SearchEngine.testingStart(args);
 		
 		dbSeed = new DatabaseSeed();
 		dbSeed.insertUsers();
@@ -79,7 +79,7 @@ public class ArangoHandlerTest {
 		searchKey = searchKey.toLowerCase();
 		boolean check = false;
 		for(Post post : results){
-			
+			System.out.println(post);
 			if(post.getText().toLowerCase().contains(searchKey))
 				check = true;
 
@@ -107,10 +107,10 @@ public class ArangoHandlerTest {
 	
 	@AfterClass
 	public static void tearDown() throws ArangoDBException, FileNotFoundException, ClassNotFoundException, IOException, SQLException{
-		dbSeed.deleteAllUsers();
-		dbSeed.deleteAllCompanies();
-		dbSeed.deleteAllJobs();
-		dbSeed.deleteAllPosts();
+//		dbSeed.deleteAllUsers();
+//		dbSeed.deleteAllCompanies();
+//		dbSeed.deleteAllJobs();
+//		dbSeed.deleteAllPosts();
 		SearchEngine.shutdown();
 	}
 	

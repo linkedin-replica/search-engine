@@ -1,7 +1,13 @@
 package com.linkedin.replica.serachEngine.models;
 
+/**
+ * Request model which is used to model json requests to SearchEngine.
+ */
 public class Request {
+
+	// type of request which is either one of the following type: USERS or COMPANIES or POSTS or JOBS.	 
 	private RequestType type;
+	// search key which is the only argument needed from request.
 	private String searchKey;
 	
 	public RequestType getType() {

@@ -33,7 +33,7 @@ public class SearchService {
 	public  String serve(String commandName, HashMap<String, String> args) throws ClassNotFoundException, InstantiationException, IllegalAccessException{
 			String commandClassName = commandsPackageName + "." + prop.getProperty(commandName + ".command");
 			String handlerClassName = dbHandlerPackageName + "." + prop.getProperty(commandName+ ".dbHandler");
-			
+		
 			// load class of type command and create an instance
 			Class c = Class.forName(commandClassName);
 			Object o = c.newInstance();
