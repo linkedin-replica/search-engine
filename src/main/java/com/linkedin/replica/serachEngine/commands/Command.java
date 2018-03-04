@@ -19,8 +19,17 @@ public abstract class Command {
      * @return The output (if any) of the command
      * 	LinkedHashMap preserve order of insertion so it will preserve this order when parsing to JSON
      */
-    public abstract LinkedHashMap<String, Object> execute();
+    public abstract String execute();
 
+    /**
+     * Parse object to JSON String.
+     * @param o
+     * 	object to be parsed.
+     * @return
+     * 	JSON string.
+     */
+    protected abstract String parseToJSON(Object o);
+    
 	public void setArgs(HashMap<String, String> args) {
 		this.args = args;
 	}
@@ -29,5 +38,11 @@ public abstract class Command {
 		this.dbHandler = dbHandler;
 	}
     
-    
+	  protected void validateArgs(String[] requiredArgs) {
+	        for(String arg: requiredArgs)
+	            if(!args.containsKey(arg)) {
+	                String exceptionMsg = String.format("Cannot execute command. %s argument is missing", arg);
+	                throw new IllegalArgumentException(exceptionMsg);
+	            }
+	    }
 }

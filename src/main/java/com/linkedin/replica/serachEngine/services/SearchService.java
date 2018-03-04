@@ -4,7 +4,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Properties;
 
 import com.linkedin.replica.serachEngine.commands.Command;
@@ -31,7 +30,7 @@ public class SearchService {
 		dbHandlerPackageName = "com.linkedin.replica.serachEngine.databaseHandlers.impl";
 	}
 		
-	public  LinkedHashMap<String, Object> serve(String commandName, HashMap<String, String> args) throws ClassNotFoundException, InstantiationException, IllegalAccessException{
+	public  String serve(String commandName, HashMap<String, String> args) throws ClassNotFoundException, InstantiationException, IllegalAccessException{
 			String commandClassName = commandsPackageName + "." + prop.getProperty(commandName + ".command");
 			String handlerClassName = dbHandlerPackageName + "." + prop.getProperty(commandName+ ".dbHandler");
 			

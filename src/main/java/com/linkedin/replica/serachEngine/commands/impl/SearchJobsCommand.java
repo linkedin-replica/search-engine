@@ -1,10 +1,11 @@
 package com.linkedin.replica.serachEngine.commands.impl;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 
+import java.util.List;
+
+import com.google.gson.Gson;
 import com.linkedin.replica.serachEngine.commands.Command;
-import com.linkedin.replica.serachEngine.databaseHandlers.DatabaseHandler;
+import com.linkedin.replica.serachEngine.models.Job;
 
 /**
  *  Implementation of command design patterns for search for jobs functionality
@@ -14,12 +15,21 @@ public class SearchJobsCommand extends Command {
 	public SearchJobsCommand(){super();}
 	
 	@Override
-	public LinkedHashMap<String, Object> execute() {
-		// create a LinkedHashMap to hold results 
-		LinkedHashMap<String,Object> results = new LinkedHashMap<String, Object>();
-		// call dbHandler to get results from db and add returned results to linkedHashMap
-		results.put("results", dbHandler.searchJobs(args.get("searchKey")));
-		return results;
+	public String execute() {
+        // validate that all required arguments that are passed
+		validateArgs(new String[]{"searchKey"});
+		
+		// call dbHandler to get list of jobs from db 
+		List<Job> jobs = dbHandler.searchJobs(args.get("searchKey"));
+		return parseToJSON(jobs);
+	}
+
+	@Override
+	protected String parseToJSON(Object o) {
+		List<Job> jobs = (List<Job>) o;
+		Gson gson = new Gson();
+		String json = gson.toJson(jobs);
+		return json;
 	}
 
 }

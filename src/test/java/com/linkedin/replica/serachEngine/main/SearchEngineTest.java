@@ -13,9 +13,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.arangodb.ArangoDBException;
-import com.linkedin.replica.serachEngine.databaseHandlers.DatabaseHandler;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.linkedin.replica.serachEngine.databaseHandlers.DatabaseSeed;
-import com.linkedin.replica.serachEngine.databaseHandlers.impl.ArangoHandler;
 import com.linkedin.replica.serachEngine.models.Company;
 import com.linkedin.replica.serachEngine.models.Job;
 import com.linkedin.replica.serachEngine.models.Post;
@@ -48,7 +48,9 @@ public class SearchEngineTest {
 		String searchKey = "hm";
 		HashMap<String,String> htbl =  new HashMap<String, String>();
 		htbl.put("searchKey", searchKey);
-		List<User> results = (List<User>) service.serve("search.user",htbl).get("results");
+		
+		Gson gson = new Gson();
+		List<User> results = gson.fromJson( service.serve("search.user",htbl), new TypeToken<List<User>>(){}.getType());
 		
 		boolean check = false;
 		for(User user : results){
@@ -68,7 +70,9 @@ public class SearchEngineTest {
 		String searchKey = "Goo";
 		HashMap<String,String> htbl =  new HashMap<String, String>();
 		htbl.put("searchKey", searchKey);
-		List<Company> results = (List<Company>) service.serve("search.company",htbl).get("results");
+		
+		Gson gson = new Gson();
+		List<Company> results = gson.fromJson( service.serve("search.company",htbl), new TypeToken<List<Company>>(){}.getType());
 		
 		boolean check = false;
 		for(Company company : results){
@@ -85,7 +89,9 @@ public class SearchEngineTest {
 		String searchKey = "Lorem";
 		HashMap<String,String> htbl =  new HashMap<String, String>();
 		htbl.put("searchKey", searchKey);
-		List<Post> results = (List<Post>) service.serve("search.post",htbl).get("results");
+		
+		Gson gson = new Gson();
+		List<Post> results = gson.fromJson( service.serve("search.post",htbl), new TypeToken<List<Post>>(){}.getType());
 
 		searchKey = searchKey.toLowerCase();
 		boolean check = false;
@@ -106,7 +112,8 @@ public class SearchEngineTest {
 		
 		HashMap<String,String> htbl =  new HashMap<String, String>();
 		htbl.put("searchKey", searchKey);
-		List<Job> results = (List<Job>) service.serve("search.job",htbl).get("results");
+		Gson gson = new Gson();
+		List<Job> results = gson.fromJson( service.serve("search.job",htbl), new TypeToken<List<Job>>(){}.getType());
 		
 		boolean check = false;
 		for(Job job : results){
