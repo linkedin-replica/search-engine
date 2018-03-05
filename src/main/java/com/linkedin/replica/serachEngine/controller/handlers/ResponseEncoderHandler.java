@@ -1,5 +1,9 @@
 package com.linkedin.replica.serachEngine.controller.handlers;
 
+import com.google.gson.Gson;
+import com.linkedin.replica.serachEngine.models.ErrorResponseModel;
+import com.linkedin.replica.serachEngine.models.SuccessResponseModel;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
@@ -18,11 +22,23 @@ public class ResponseEncoderHandler extends ChannelOutboundHandlerAdapter{
 
 	@Override
 	public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+		// wrap msg in ByteBuf
 		ByteBuf out = Unpooled.wrappedBuffer(msg.toString().getBytes());
-		FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, HttpResponseStatus.ACCEPTED,
+		Gson gson = new Gson();
+		// construct FullHttpResponse
+		FullHttpResponse response = null;
+		if(msg instanceof SuccessResponseModel)
+			response = new DefaultFullHttpResponse(HTTP_1_1, HttpResponseStatus.ACCEPTED,
 					Unpooled.copiedBuffer(out.toString(CharsetUtil.UTF_8), CharsetUtil.UTF_8));
-
+		
+		if(msg instanceof ErrorResponseModel)
+			response = new DefaultFullHttpResponse(HTTP_1_1, HttpResponseStatus.BAD_REQUEST,
+					Unpooled.copiedBuffer(out.toString(CharsetUtil.UTF_8), CharsetUtil.UTF_8));
+		 
+		// set headers
 	    response.headers().set(CONTENT_TYPE, "application/json; charset=UTF-8");
+	    
+	    // write response to HttpResponseEncoder 
 		ChannelFuture future = ctx.writeAndFlush(response);
 		future.addListener(ChannelFutureListener.CLOSE);
 	}

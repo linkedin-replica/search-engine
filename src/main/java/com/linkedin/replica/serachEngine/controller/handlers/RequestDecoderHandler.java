@@ -34,7 +34,6 @@ public class RequestDecoderHandler extends ChannelInboundHandlerAdapter{
 			String json = builder.toString();
 			Gson gson = new Gson();
 			Request request = gson.fromJson(json, Request.class);
-			System.out.println(request.toString());
 			// pass the decoded request to next channel in pipeline
 			ctx.fireChannelRead(request);
 		}

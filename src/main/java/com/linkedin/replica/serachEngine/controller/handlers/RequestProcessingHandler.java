@@ -4,11 +4,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 
+import com.linkedin.replica.serachEngine.models.ErrorResponseModel;
 import com.linkedin.replica.serachEngine.models.Request;
+import com.linkedin.replica.serachEngine.models.SuccessResponseModel;
 import com.linkedin.replica.serachEngine.services.SearchService;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.codec.http.HttpResponseStatus;
 
 
 public class RequestProcessingHandler extends ChannelInboundHandlerAdapter{
@@ -33,8 +36,14 @@ public class RequestProcessingHandler extends ChannelInboundHandlerAdapter{
 		HashMap<String,String> args =  new HashMap<String, String>();
 		args.put("searchKey", request.getSearchKey());
 		String jsonRes = service.serve(request.getType().getCommandName(), args);
-		System.out.println("-->"+jsonRes);
-		ctx.writeAndFlush(jsonRes);
+
+		// create successful response
+		SuccessResponseModel response = new SuccessResponseModel();
+		response.setCode(HttpResponseStatus.ACCEPTED.code());
+		response.setResults(jsonRes);
+		
+		// send response to ResponseEncoderHandler
+		ctx.writeAndFlush(response);
 	}
 	
 	/**
@@ -57,7 +66,14 @@ public class RequestProcessingHandler extends ChannelInboundHandlerAdapter{
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
 			throws Exception {
 		String errorJSON = String.format("\"errMessage\": %s", cause.getMessage());
-		ctx.write(errorJSON);
+		
+		// construct Error Response
+		ErrorResponseModel response = new ErrorResponseModel();
+		response.setCode(HttpResponseStatus.BAD_REQUEST.code());
+		response.setMessage(errorJSON);
+		
+		// send response to ResponseEncoderHandler
+		ctx.writeAndFlush(response);
 	}
 	
 	

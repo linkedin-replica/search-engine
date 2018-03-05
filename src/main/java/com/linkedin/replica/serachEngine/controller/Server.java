@@ -49,11 +49,11 @@ public class Server {
 
 						@Override
 						protected void initChannel(SocketChannel channel) throws Exception {
-							channel.pipeline().addLast(new HttpRequestDecoder());
-							channel.pipeline().addLast(new HttpResponseEncoder());		
-							channel.pipeline().addLast(new ResponseEncoderHandler());
-							channel.pipeline().addLast(new RequestDecoderHandler());
-							channel.pipeline().addLast(new RequestProcessingHandler());
+							channel.pipeline().addLast(new HttpRequestDecoder()); // decode request bytes to FullHttpRequest (HttpRequest, HttpRequestContent, LastHttpRequestContent).
+							channel.pipeline().addLast(new HttpResponseEncoder());	 // encode FullHttpResponse to bytes.
+							channel.pipeline().addLast(new ResponseEncoderHandler()); // encode response object model into FullHttpResponse.
+							channel.pipeline().addLast(new RequestDecoderHandler()); // decode FullHttpRequest to request model.
+							channel.pipeline().addLast(new RequestProcessingHandler()); // process request object model and create response object model from results.
 						}	
 					})
 					.option(ChannelOption.SO_BACKLOG, 128) // maximum queue length for incoming connection (a request to connect)
@@ -61,7 +61,7 @@ public class Server {
         			
 			// Bind and start to accept incoming connections.
         	InetSocketAddress socketAddress = new InetSocketAddress(IP, PORT);
-			ChannelFuture future = server.bind(socketAddress).sync();
+			ChannelFuture future = server.bind(socketAddress);
 			future.addListener(new ChannelFutureListener() {
 				
 				@Override
