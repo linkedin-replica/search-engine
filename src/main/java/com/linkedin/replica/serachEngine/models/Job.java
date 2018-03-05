@@ -4,19 +4,19 @@ package com.linkedin.replica.serachEngine.models;
  * Job Model
  */
 public class Job {
-	private String jobID;
+	private String _key;
 	private String industryType;
 	private String jobBrief;
 	private String title;
 	
 	public Job(){}
-
-	public String getJobID() {
-		return jobID;
+	
+	public String get_key() {
+		return _key;
 	}
 
-	public void setJobID(String jobID) {
-		this.jobID = jobID;
+	public void set_key(String _key) {
+		this._key = _key;
 	}
 
 	public String getIndustryType() {
