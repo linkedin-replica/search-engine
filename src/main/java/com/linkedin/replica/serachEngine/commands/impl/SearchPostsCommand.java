@@ -16,21 +16,12 @@ public class SearchPostsCommand extends Command{
 	public SearchPostsCommand(){super();}
 
 	@Override
-	public String execute() {
+	public Object execute() {
         // validate that all required arguments that are passed
 		validateArgs(new String[]{"searchKey"});
 		
 		// call dbHandler to get list of posts in db
 		List<Post> posts = dbHandler.searchPosts(args.get("searchKey"));
-		return parseToJSON(posts);
+		return posts;
 	}
-
-	@Override
-	protected String parseToJSON(Object o) {
-		List<Post> posts = (List<Post>) o;
-		Gson gson = new Gson();
-		String json = gson.toJson(posts);
-		return json;
-	}
-
 }

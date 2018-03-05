@@ -22,13 +22,17 @@ public class ResponseEncoderHandler extends ChannelOutboundHandlerAdapter{
 
 	@Override
 	public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
-		// wrap msg in ByteBuf
-		ByteBuf out = Unpooled.wrappedBuffer(msg.toString().getBytes());
+		// convert msg (response model from RequestProcessingHandler)
 		Gson gson = new Gson();
+		String body =  gson.toJson(msg);
+		// wrap msg in ByteBuf
+		ByteBuf out = Unpooled.wrappedBuffer(body.getBytes());
+
+		
 		// construct FullHttpResponse
 		FullHttpResponse response = null;
 		if(msg instanceof SuccessResponseModel)
-			response = new DefaultFullHttpResponse(HTTP_1_1, HttpResponseStatus.ACCEPTED,
+			response = new DefaultFullHttpResponse(HTTP_1_1, HttpResponseStatus.OK,
 					Unpooled.copiedBuffer(out.toString(CharsetUtil.UTF_8), CharsetUtil.UTF_8));
 		
 		if(msg instanceof ErrorResponseModel)

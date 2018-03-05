@@ -35,11 +35,11 @@ public class RequestProcessingHandler extends ChannelInboundHandlerAdapter{
 		 */
 		HashMap<String,String> args =  new HashMap<String, String>();
 		args.put("searchKey", request.getSearchKey());
-		String jsonRes = service.serve(request.getType().getCommandName(), args);
+		Object jsonRes = service.serve(request.getType().getCommandName(), args);
 
 		// create successful response
 		SuccessResponseModel response = new SuccessResponseModel();
-		response.setCode(HttpResponseStatus.ACCEPTED.code());
+		response.setCode(HttpResponseStatus.OK.code());
 		response.setResults(jsonRes);
 		
 		// send response to ResponseEncoderHandler

@@ -30,7 +30,7 @@ public class SearchService {
 		dbHandlerPackageName = "com.linkedin.replica.serachEngine.databaseHandlers.impl";
 	}
 		
-	public  String serve(String commandName, HashMap<String, String> args) throws ClassNotFoundException, InstantiationException, IllegalAccessException{
+	public  Object serve(String commandName, HashMap<String, String> args) throws ClassNotFoundException, InstantiationException, IllegalAccessException{
 			String commandClassName = commandsPackageName + "." + prop.getProperty(commandName + ".command");
 			String handlerClassName = dbHandlerPackageName + "." + prop.getProperty(commandName+ ".dbHandler");
 		

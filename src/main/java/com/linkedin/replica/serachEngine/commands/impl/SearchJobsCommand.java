@@ -15,21 +15,12 @@ public class SearchJobsCommand extends Command {
 	public SearchJobsCommand(){super();}
 	
 	@Override
-	public String execute() {
+	public Object execute() {
         // validate that all required arguments that are passed
 		validateArgs(new String[]{"searchKey"});
 		
 		// call dbHandler to get list of jobs from db 
 		List<Job> jobs = dbHandler.searchJobs(args.get("searchKey"));
-		return parseToJSON(jobs);
+		return jobs;
 	}
-
-	@Override
-	protected String parseToJSON(Object o) {
-		List<Job> jobs = (List<Job>) o;
-		Gson gson = new Gson();
-		String json = gson.toJson(jobs);
-		return json;
-	}
-
 }
