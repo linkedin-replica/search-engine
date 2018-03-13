@@ -1,48 +1,57 @@
 package com.linkedin.replica.serachEngine.config;
 
-import java.io.FileNotFoundException;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.SQLException;
+import java.util.Properties;
+
+import com.linkedin.replica.serachEngine.commands.Command;
+import com.linkedin.replica.serachEngine.database.handlers.SearchHandler;
+
 
 public class Configuration {
-	private String databaseConfigPath;
-	private String commandConfigPath;
-	private String arangoNamesConfigPath;
+    private final Properties commandConfig = new Properties();
+    private final Properties appConfig = new Properties();
+    private final Properties arangoConfig = new Properties();
+  
 	private static Configuration instance;
  	
-	private Configuration(String databaseConfigPath, String commandConfigPath,
-			String arangoNamesConfigPath) {
-		this.databaseConfigPath = databaseConfigPath;
-		this.commandConfigPath = commandConfigPath;
-		this.arangoNamesConfigPath = arangoNamesConfigPath;
+	private Configuration(String appConfigPath, String arangoConfigPath, String commandsConfigPath) throws IOException {
+        populateWithConfig(appConfigPath, appConfig);
+        populateWithConfig(arangoConfigPath, arangoConfig);
+        populateWithConfig(commandsConfigPath, commandConfig);
 	}
 	
-	public static Configuration getInstance(String databaseConfigPath, String commandConfigPath,
-			String arangoNamesConfigPath) {
-		
-		if(instance == null){
-			synchronized (Configuration.class) {
-				if(instance == null){
-					instance = new Configuration(databaseConfigPath, commandConfigPath, arangoNamesConfigPath);
-				}
-			}
-		}	
+	public static Configuration getInstance() {
 		return instance;
 	}
 
-	public static Configuration getInstance(){
-		return instance;
-	}
+    public static void init(String appConfigPath, String arangoConfigPath, String commandsConfigPath) throws IOException {
+        instance = new Configuration(appConfigPath, arangoConfigPath, commandsConfigPath);
+    }
+    
+    private static void populateWithConfig(String configFilePath, Properties properties) throws IOException {
+        FileInputStream inputStream = new FileInputStream(configFilePath);
+        properties.load(inputStream);
+        inputStream.close();
+    }
 	
-	public String getDatabaseConfigPath() {
-		return databaseConfigPath;
-	}
+    public Class getCommandClass(String commandName) throws ClassNotFoundException {
+        String commandsPackageName = Command.class.getPackage().getName() + ".impl";
+        String commandClassPath = commandsPackageName + '.' + commandConfig.get(commandName);
+        return Class.forName(commandClassPath);
+    }
 
-	public String getCommandConfigPath() {
-		return commandConfigPath;
-	}
+    public Class getHandlerClass(String commandName) throws ClassNotFoundException {
+        String handlerPackageName = SearchHandler.class.getPackage().getName() + ".impl";
+        String handlerClassPath = handlerPackageName + "." + commandConfig.get(commandName + ".handler");
+        return Class.forName(handlerClassPath);
+    }
 
-	public String getArangoNamesConfigPath() {
-		return arangoNamesConfigPath;
-	}
+    public String getAppConfig(String key) {
+        return appConfig.getProperty(key);
+    }
+
+    public String getArangoConfig(String key) {
+        return arangoConfig.getProperty(key);
+    }
 }

@@ -1,14 +1,14 @@
 package com.linkedin.replica.serachEngine.services;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.Properties;
 
 import com.linkedin.replica.serachEngine.commands.Command;
 import com.linkedin.replica.serachEngine.config.Configuration;
-import com.linkedin.replica.serachEngine.databaseHandlers.DatabaseHandler;
+import com.linkedin.replica.serachEngine.database.handlers.DatabaseHandler;
 
 /**
  * Search Service is responsible for taking input from controller, reading commands config file to 
@@ -18,37 +18,22 @@ import com.linkedin.replica.serachEngine.databaseHandlers.DatabaseHandler;
  * It will call command execute method after passing to its DatabaseHandler
  */
 public class SearchService {
-	// load config file
-	private Properties prop;
-	private String commandsPackageName;
-	private String dbHandlerPackageName;
+    private Configuration config;
+
 	
 	public SearchService() throws FileNotFoundException, IOException{
-		prop = new Properties();
-		prop.load(new FileInputStream(Configuration.getInstance().getCommandConfigPath()));
-		commandsPackageName = "com.linkedin.replica.serachEngine.commands.impl";
-		dbHandlerPackageName = "com.linkedin.replica.serachEngine.databaseHandlers.impl";
+        config = Configuration.getInstance();
 	}
 		
-	public  Object serve(String commandName, HashMap<String, String> args) throws ClassNotFoundException, InstantiationException, IllegalAccessException{
-			String commandClassName = commandsPackageName + "." + prop.getProperty(commandName + ".command");
-			String handlerClassName = dbHandlerPackageName + "." + prop.getProperty(commandName+ ".dbHandler");
-		
-			// load class of type command and create an instance
-			Class c = Class.forName(commandClassName);
-			Object o = c.newInstance();
-			Command command = (Command) o;
-			
-			// load class of type database handler
-			c = Class.forName(handlerClassName);
-			o = c.newInstance();
-			DatabaseHandler dbHandler = (DatabaseHandler) o;
-			
-			// set args and dbHandler of command
-			command.setArgs(args);
-			command.setDbHandler(dbHandler);
-			
-			// execute command
-			return command.execute();
+	public  Object serve(String commandName, HashMap<String, String> args) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+
+        Class<?> dbHandlerClass = config.getHandlerClass(commandName);
+        DatabaseHandler dbHandler = (DatabaseHandler) dbHandlerClass.newInstance();
+
+        Class<?> commandClass = config.getCommandClass(commandName);
+        Constructor constructor = commandClass.getConstructor(new Class<?>[]{HashMap.class, DatabaseHandler.class});
+        Command command = (Command) constructor.newInstance(args,dbHandler);
+
+        return command.execute();
 	}
 }

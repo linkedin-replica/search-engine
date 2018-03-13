@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -13,8 +14,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.arangodb.ArangoDBException;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.linkedin.replica.serachEngine.databaseHandlers.DatabaseSeed;
 import com.linkedin.replica.serachEngine.models.Company;
 import com.linkedin.replica.serachEngine.models.Job;
@@ -29,8 +28,8 @@ public class SearchEngineTest {
 	@BeforeClass
 	public static void setup() throws ClassNotFoundException, IOException, SQLException, InterruptedException{
 		// startup SearchEngine 
-		String[] args = {"src/main/resources/database_config", "src/main/resources/command_config", "src/main/resources/arango_names"};
-		SearchEngine.testingStart(args);
+		String[] args = {"src/main/resources/app.config","src/main/resources/arango.test.config", "src/main/resources/commands.config"};
+		Main.testingStart(args);
 		service = new SearchService();
 		
 		dbSeed = new DatabaseSeed();
@@ -43,7 +42,7 @@ public class SearchEngineTest {
 	}
 	
 	@Test
-	public void testSearchUsers() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException{
+	public void testSearchUsers() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException{
 		String searchKey = "hm";
 		HashMap<String,String> htbl =  new HashMap<String, String>();
 		htbl.put("searchKey", searchKey);
@@ -64,7 +63,7 @@ public class SearchEngineTest {
 	}
 	
 	@Test
-	public void testSearchCompanies() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException{
+	public void testSearchCompanies() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException{
 		String searchKey = "Goo";
 		HashMap<String,String> htbl =  new HashMap<String, String>();
 		htbl.put("searchKey", searchKey);
@@ -82,7 +81,7 @@ public class SearchEngineTest {
 	}
 	
 	@Test
-	public void testSearchPosts() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException{
+	public void testSearchPosts() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException{
 		String searchKey = "Lorem";
 		HashMap<String,String> htbl =  new HashMap<String, String>();
 		htbl.put("searchKey", searchKey);
@@ -103,7 +102,7 @@ public class SearchEngineTest {
 	
 	
 	@Test
-	public void testSearchJobs() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException{
+	public void testSearchJobs() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException{
 		String searchKey = "Developer";
 		
 		HashMap<String,String> htbl =  new HashMap<String, String>();
@@ -127,6 +126,6 @@ public class SearchEngineTest {
 		dbSeed.deleteAllCompanies();
 		dbSeed.deleteAllJobs();
 		dbSeed.deleteAllPosts();
-		SearchEngine.shutdown();
+		Main.shutdown();
 	}
 }

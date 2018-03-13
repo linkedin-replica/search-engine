@@ -1,5 +1,0 @@
-db.name=linkedin
-collection.user.name=users
-collection.post.name=posts
-collection.job.name=jobs
-collection.company.name=companies

@@ -77,13 +77,5 @@ public class Company {
 
 	public void setYearFounded(Long yearFounded) {
 		this.yearFounded = yearFounded;
-	}
-
-	@Override
-	public String toString() {
-		return "Company [companyID=" + companyID + ", companyName="
-				+ companyName + "]";
-	}
-
-	
+	}	
 }

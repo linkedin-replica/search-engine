@@ -10,13 +10,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.arangodb.ArangoDBException;
-import com.linkedin.replica.serachEngine.databaseHandlers.impl.ArangoHandler;
-import com.linkedin.replica.serachEngine.main.SearchEngine;
+import com.linkedin.replica.serachEngine.database.handlers.SearchHandler;
+import com.linkedin.replica.serachEngine.database.handlers.impl.ArangoSearchHandler;
+import com.linkedin.replica.serachEngine.main.Main;
 import com.linkedin.replica.serachEngine.models.Company;
 import com.linkedin.replica.serachEngine.models.Job;
 import com.linkedin.replica.serachEngine.models.Post;
 import com.linkedin.replica.serachEngine.models.User;
-import com.linkedin.replica.serachEngine.services.SearchService;
 
 import static org.junit.Assert.assertEquals;
 
@@ -26,8 +26,8 @@ public class ArangoHandlerTest {
 	@BeforeClass
 	public static void setup() throws ClassNotFoundException, IOException, SQLException, InterruptedException{
 		// startup SearchEngine 
-		String[] args = {"src/main/resources/database_config", "src/main/resources/command_config", "src/main/resources/arango_names"};
-		SearchEngine.testingStart(args);
+		String[] args = {"src/main/resources/app.config","src/main/resources/arango.test.config", "src/main/resources/commands.config"};
+		Main.testingStart(args);
 		
 		dbSeed = new DatabaseSeed();
 		dbSeed.insertUsers();
@@ -39,7 +39,7 @@ public class ArangoHandlerTest {
 	@Test
 	public void testSearchUsers() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException{
 		String searchKey = "hm";
-		DatabaseHandler dbHandler = new ArangoHandler();
+		SearchHandler dbHandler = new ArangoSearchHandler();
 		List<User> results = dbHandler.searchUsers(searchKey);
 		
 		boolean check = false;
@@ -58,7 +58,7 @@ public class ArangoHandlerTest {
 	@Test
 	public void testSearchCompanies() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException{
 		String searchKey = "Goo";
-		DatabaseHandler dbHandler = new ArangoHandler();
+		SearchHandler dbHandler = new ArangoSearchHandler();
 		List<Company> results = dbHandler.searchCompanies(searchKey);
 		
 		boolean check = false;
@@ -74,7 +74,7 @@ public class ArangoHandlerTest {
 	@Test
 	public void testSearchPosts() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException{
 		String searchKey = "Lorem";
-		DatabaseHandler dbHandler = new ArangoHandler();
+		SearchHandler dbHandler = new ArangoSearchHandler();
 		List<Post> results = dbHandler.searchPosts(searchKey);
 		searchKey = searchKey.toLowerCase();
 		boolean check = false;
@@ -92,7 +92,7 @@ public class ArangoHandlerTest {
 	@Test
 	public void testSearchJobs() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException{
 		String searchKey = "Developer";
-		DatabaseHandler dbHandler = new ArangoHandler();
+		SearchHandler dbHandler = new ArangoSearchHandler();
 		List<Job> results = dbHandler.searchJobs(searchKey);
 		
 		boolean check = false;
@@ -111,7 +111,7 @@ public class ArangoHandlerTest {
 		dbSeed.deleteAllCompanies();
 		dbSeed.deleteAllJobs();
 		dbSeed.deleteAllPosts();
-		SearchEngine.shutdown();
+		Main.shutdown();
 	}
 	
 }

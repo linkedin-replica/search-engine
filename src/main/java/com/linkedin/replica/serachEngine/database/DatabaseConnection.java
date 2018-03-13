@@ -1,16 +1,13 @@
-package com.linkedin.replica.serachEngine.config;
+package com.linkedin.replica.serachEngine.database;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
 import redis.clients.jedis.Jedis;
 
 import com.arangodb.ArangoDB;
+import com.linkedin.replica.serachEngine.config.Configuration;
 
 /**
  *  DatabaseConnection is a singleton class responsible for reading database config file and initiate 
@@ -18,18 +15,14 @@ import com.arangodb.ArangoDB;
  */
 public class DatabaseConnection {
 	private ArangoDB arangodb; 
-	private Connection mysqlConn;
 	private Jedis redis;
-	
+    private Configuration config;
+
 	private static DatabaseConnection instance;
-	private Properties properties;
 	
 	private DatabaseConnection() throws FileNotFoundException, IOException, SQLException, ClassNotFoundException{
-		properties = new Properties();
-		properties.load(new FileInputStream(Configuration.getInstance().getDatabaseConfigPath()));
-		
-		arangodb = getNewArrangoDB();
-		mysqlConn = getNewMysqlDB();
+        config = Configuration.getInstance();
+		initializeArangoDB();
 //		redis = new Jedis();
 	}
 	
@@ -45,15 +38,12 @@ public class DatabaseConnection {
 	 * @throws FileNotFoundException 
 	 * @throws ClassNotFoundException 
 	 */
-	public static DatabaseConnection getInstance() throws FileNotFoundException, IOException, SQLException, ClassNotFoundException{
-		if(instance == null){
-			synchronized (DatabaseConnection.class) {
-				if(instance == null){
-					instance = new DatabaseConnection();
-				}
-			}
-		}	
+	public static DatabaseConnection getInstance() throws FileNotFoundException, IOException, SQLException, ClassNotFoundException{	
 		return instance;
+	}
+	
+	public static void init() throws IOException, ClassNotFoundException, SQLException {
+		instance = new DatabaseConnection();
 	}
 	
 	/**
@@ -66,28 +56,12 @@ public class DatabaseConnection {
 	 * Instantiate ArangoDB
 	 * @return
 	 */
-	private ArangoDB getNewArrangoDB(){
-		return new ArangoDB.Builder()
-				.user(properties.getProperty("arangodb.user"))
-				.password(properties.getProperty("arangodb.password"))
-				.build();
-	}
-
-	/**
-	 * Instantiate Mysql
-	 * 
-	 * @return
-	 * @throws SQLException
-	 * @throws ClassNotFoundException
-	 */
-	private Connection getNewMysqlDB() throws SQLException, ClassNotFoundException{
-		// This will load the MySQL driver, each DB has its own driver
-		Class.forName(properties.getProperty("mysql.database-driver"));
-		// create new connection and return it
-		return DriverManager.getConnection(properties.getProperty("mysql.url"),
-				properties.getProperty("mysql.userName"),
-				properties.getProperty("mysql.password"));
-	}
+    private void initializeArangoDB() {
+    	arangodb = new ArangoDB.Builder()
+                .user(config.getArangoConfig("arangodb.user"))
+                .password(config.getArangoConfig("arangodb.password"))
+                .build();
+    }
 	
 	public void closeConnections() throws SQLException{
 		if(arangodb != null)
@@ -95,17 +69,10 @@ public class DatabaseConnection {
 		
 		if(redis != null)
 			redis.shutdown();
-		
-		if(mysqlConn != null)
-			mysqlConn.close();
 	}
 	
 	public ArangoDB getArangodb() {
 		return arangodb;
-	}
-
-	public Connection getMysqlConn() {
-		return mysqlConn;
 	}
 	
 	public Jedis getRedis() {

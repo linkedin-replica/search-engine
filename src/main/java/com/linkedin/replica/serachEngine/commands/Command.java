@@ -1,9 +1,9 @@
 package com.linkedin.replica.serachEngine.commands;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 
-import com.linkedin.replica.serachEngine.databaseHandlers.DatabaseHandler;
+import com.linkedin.replica.serachEngine.database.handlers.DatabaseHandler;
+import com.linkedin.replica.serachEngine.database.handlers.SearchHandler;
 /**
  * Command is an abstract class responsible for handling specific request and it communicates between
  * external input and internal functionality implementation
@@ -12,7 +12,10 @@ public abstract class Command {
     protected HashMap<String, String> args;
     protected DatabaseHandler dbHandler;
     
-    public Command(){}
+    public Command(HashMap<String, String> args, DatabaseHandler dbHandler) {
+        this.args = args;
+        this.dbHandler = dbHandler;
+    }
     
     /**
      * Execute the command
@@ -21,11 +24,7 @@ public abstract class Command {
      */
     public abstract Object execute();
     
-	public void setArgs(HashMap<String, String> args) {
-		this.args = args;
-	}
-
-	public void setDbHandler(DatabaseHandler dbHandler) {
+	public void setDbHandler(SearchHandler dbHandler) {
 		this.dbHandler = dbHandler;
 	}
     
@@ -36,4 +35,8 @@ public abstract class Command {
 	                throw new IllegalArgumentException(exceptionMsg);
 	            }
 	    }
+	  
+	  public static void main(String[] args) {
+		System.out.println(Command.class.getPackage().getName());
+	}
 }
