@@ -1,24 +1,32 @@
 package com.linkedin.replica.serachEngine.commands.impl;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.List;
 
 import com.linkedin.replica.serachEngine.commands.Command;
-import com.linkedin.replica.serachEngine.databaseHandlers.DatabaseHandler;
+import com.linkedin.replica.serachEngine.database.handlers.DatabaseHandler;
+import com.linkedin.replica.serachEngine.database.handlers.SearchHandler;
+import com.linkedin.replica.serachEngine.models.Company;
+
 /**
  *  Implementation of command design patterns for search for companies functionality
  */
 public class SearchCompaniesCommand extends Command{
 	
-	public SearchCompaniesCommand (){super();}
+	public SearchCompaniesCommand (HashMap<String, String> args, DatabaseHandler dbHandler){
+		super(args,dbHandler);
+	}
 	
 	@Override
-	public LinkedHashMap<String, Object> execute() {
-		// create a LinkedHashMap to hold results 
-		LinkedHashMap<String,Object> results = new LinkedHashMap<String, Object>();
-		// call dbHandler to get results from db and add returned results to linkedHashMap
-		results.put("results", dbHandler.searchCompanies(args.get("searchKey")));
-		return results;
+	public Object execute() {
+		// get database handler that implements functionality of this command
+		SearchHandler dbHandler = (SearchHandler) this.dbHandler;
+		
+        // validate that all required arguments that are passed
+		validateArgs(new String[]{"searchKey"});
+		
+		// call dbHandler to get list of companies from db 
+		List<Company> companies = dbHandler.searchCompanies(args.get("searchKey"));
+		return companies;
 	}
-
 }

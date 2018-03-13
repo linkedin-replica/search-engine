@@ -1,4 +1,4 @@
-package com.linkedin.replica.serachEngine.databaseHandlers;
+package com.linkedin.replica.serachEngine.database.handlers;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import com.linkedin.replica.serachEngine.models.Post;
 /**
  * Database Handler is responsible for dealing with storage engine to handle specific requests
  */
-public interface DatabaseHandler {
+public interface SearchHandler extends DatabaseHandler{
 	
 	/**
 	 * Search for users 

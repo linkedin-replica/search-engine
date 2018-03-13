@@ -1,32 +1,31 @@
 package com.linkedin.replica.serachEngine.databaseHandlers;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Properties;
 
 import com.arangodb.ArangoDB;
 import com.arangodb.ArangoDBException;
 import com.arangodb.entity.BaseDocument;
-import com.linkedin.replica.serachEngine.config.DatabaseConnection;
+import com.linkedin.replica.serachEngine.config.Configuration;
+import com.linkedin.replica.serachEngine.database.DatabaseConnection;
 
 public class DatabaseSeed {
-	private static Properties properties;
-
-	public DatabaseSeed() throws FileNotFoundException, IOException{
-		properties = new Properties();
-		properties.load(new FileInputStream("src/main/resources/arango_names"));
+	private ArangoDB arangoDB;
+	private String dbName;
+	
+	public DatabaseSeed() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException {
+		arangoDB = DatabaseConnection.getInstance().getArangodb();
+		dbName = Configuration.getInstance().getArangoConfig("db.name");
 	}
 	
 	public void insertPosts() throws IOException, ClassNotFoundException, SQLException{
 		List<String> lines = Files.readAllLines(Paths.get("src/test/resources/posts"));
-		ArangoDB arangoDB = DatabaseConnection.getInstance().getArangodb();
-		String dbName = properties.getProperty("db.name");
-		String collectionName = properties.getProperty("collection.post.name");
+		
+		String collectionName = Configuration.getInstance().getArangoConfig("collection.posts.name");	
 		
 		try{
 			arangoDB.db(dbName).createCollection(collectionName);
@@ -55,9 +54,8 @@ public class DatabaseSeed {
 	
 	public void insertCompanies() throws IOException, ClassNotFoundException, SQLException{
 		List<String> lines = Files.readAllLines(Paths.get("src/test/resources/companies"));
-		ArangoDB arangoDB = DatabaseConnection.getInstance().getArangodb();
-		String dbName = properties.getProperty("db.name");
-		String collectionName = properties.getProperty("collection.company.name");
+		String collectionName = Configuration.getInstance().getArangoConfig("collection.companies.name");	
+
 		
 		try{
 			arangoDB.db(dbName).createCollection(collectionName);
@@ -86,9 +84,7 @@ public class DatabaseSeed {
 
 	public void insertJobs() throws IOException, ClassNotFoundException, SQLException{
 		List<String> lines = Files.readAllLines(Paths.get("src/test/resources/jobs"));
-		ArangoDB arangoDB = DatabaseConnection.getInstance().getArangodb();
-		String dbName = properties.getProperty("db.name");
-		String collectionName = properties.getProperty("collection.job.name");
+		String collectionName = Configuration.getInstance().getArangoConfig("collection.jobs.name");	
 		
 		try{
 			arangoDB.db(dbName).createCollection(collectionName);
@@ -117,9 +113,7 @@ public class DatabaseSeed {
 	
 	public void insertUsers() throws IOException, ClassNotFoundException, SQLException{
 		List<String> lines = Files.readAllLines(Paths.get("src/test/resources/users"));
-		ArangoDB arangoDB = DatabaseConnection.getInstance().getArangodb();
-		String dbName = properties.getProperty("db.name");
-		String collectionName = properties.getProperty("collection.user.name");
+		String collectionName = Configuration.getInstance().getArangoConfig("collection.users.name");	
 		
 		try{
 			arangoDB.db(dbName).createCollection(collectionName);
@@ -148,29 +142,25 @@ public class DatabaseSeed {
 	}
 	
 	public void deleteAllPosts() throws ArangoDBException, FileNotFoundException, ClassNotFoundException, IOException, SQLException{
-		String dbName = properties.getProperty("db.name");
-		String collectionName = properties.getProperty("collection.post.name");
+		String collectionName = Configuration.getInstance().getArangoConfig("collection.posts.name");	
 		DatabaseConnection.getInstance().getArangodb().db(dbName).collection(collectionName).drop();
 		System.out.println("Post collection is dropped");
 	}
 	
 	public void deleteAllCompanies() throws ArangoDBException, FileNotFoundException, ClassNotFoundException, IOException, SQLException{
-		String dbName = properties.getProperty("db.name");
-		String collectionName = properties.getProperty("collection.company.name");
+		String collectionName = Configuration.getInstance().getArangoConfig("collection.companies.name");	
 		DatabaseConnection.getInstance().getArangodb().db(dbName).collection(collectionName).drop();
 		System.out.println("Companies collection is dropped");
 	}
 	
 	public void deleteAllJobs() throws ArangoDBException, FileNotFoundException, ClassNotFoundException, IOException, SQLException{
-		String dbName = properties.getProperty("db.name");
-		String collectionName = properties.getProperty("collection.job.name");
+		String collectionName = Configuration.getInstance().getArangoConfig("collection.jobs.name");	
 		DatabaseConnection.getInstance().getArangodb().db(dbName).collection(collectionName).drop();
 		System.out.println("Jobs collection is dropped");
 	}
 	
 	public void deleteAllUsers() throws ArangoDBException, FileNotFoundException, ClassNotFoundException, IOException, SQLException{
-		String dbName = properties.getProperty("db.name");
-		String collectionName = properties.getProperty("collection.user.name");
+		String collectionName = Configuration.getInstance().getArangoConfig("collection.users.name");	
 		DatabaseConnection.getInstance().getArangodb().db(dbName).collection(collectionName).drop();
 		System.out.println("Users collection is dropped");
 	}

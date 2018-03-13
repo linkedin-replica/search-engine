@@ -1,8 +1,0 @@
-search.user.command=SearchUserCommand
-search.user.dbHandler=ArangoHandler
-search.company.command=SearchCompaniesCommand
-search.company.dbHandler=ArangoHandler
-search.job.command=SearchJobsCommand
-search.job.dbHandler=ArangoHandler
-search.post.command=SearchPostsCommand
-search.post.dbHandler=ArangoHandler

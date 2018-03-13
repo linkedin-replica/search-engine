@@ -4,18 +4,18 @@ package com.linkedin.replica.serachEngine.models;
  * User Model
  */
 public class User {
-	private String userId;
+	private String _key;
 	private String firstName;
 	private String lastName;
 	
 	public User(){}
-
-	public String getUserId() {
-		return userId;
+	
+	public String get_key() {
+		return _key;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void set_key(String _key) {
+		this._key = _key;
 	}
 
 	public String getFirstName() {

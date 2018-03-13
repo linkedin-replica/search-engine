@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -13,9 +14,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.arangodb.ArangoDBException;
-import com.linkedin.replica.serachEngine.databaseHandlers.DatabaseHandler;
 import com.linkedin.replica.serachEngine.databaseHandlers.DatabaseSeed;
-import com.linkedin.replica.serachEngine.databaseHandlers.impl.ArangoHandler;
 import com.linkedin.replica.serachEngine.models.Company;
 import com.linkedin.replica.serachEngine.models.Job;
 import com.linkedin.replica.serachEngine.models.Post;
@@ -27,10 +26,10 @@ public class SearchEngineTest {
 	private static SearchService service;
 	
 	@BeforeClass
-	public static void setup() throws ClassNotFoundException, IOException, SQLException{
+	public static void setup() throws ClassNotFoundException, IOException, SQLException, InterruptedException{
 		// startup SearchEngine 
-		String[] args = {"src/main/resources/database_config", "src/main/resources/command_config", "src/main/resources/arango_names"};
-		SearchEngine.start(args);
+		String[] args = {"src/main/resources/app.config","src/main/resources/arango.test.config", "src/main/resources/commands.config"};
+		Main.testingStart(args);
 		service = new SearchService();
 		
 		dbSeed = new DatabaseSeed();
@@ -43,12 +42,12 @@ public class SearchEngineTest {
 	}
 	
 	@Test
-	public void testSearchUsers() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException{
-		System.out.println("er");
+	public void testSearchUsers() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException{
 		String searchKey = "hm";
 		HashMap<String,String> htbl =  new HashMap<String, String>();
 		htbl.put("searchKey", searchKey);
-		List<User> results = (List<User>) service.serve("search.user",htbl).get("results");
+		
+		List<User> results =  (List<User>) service.serve("search.user",htbl);
 		
 		boolean check = false;
 		for(User user : results){
@@ -64,11 +63,12 @@ public class SearchEngineTest {
 	}
 	
 	@Test
-	public void testSearchCompanies() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException{
+	public void testSearchCompanies() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException{
 		String searchKey = "Goo";
 		HashMap<String,String> htbl =  new HashMap<String, String>();
 		htbl.put("searchKey", searchKey);
-		List<Company> results = (List<Company>) service.serve("search.company",htbl).get("results");
+		
+		List<Company> results = (List<Company>)service.serve("search.company",htbl);
 		
 		boolean check = false;
 		for(Company company : results){
@@ -81,11 +81,12 @@ public class SearchEngineTest {
 	}
 	
 	@Test
-	public void testSearchPosts() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException{
+	public void testSearchPosts() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException{
 		String searchKey = "Lorem";
 		HashMap<String,String> htbl =  new HashMap<String, String>();
 		htbl.put("searchKey", searchKey);
-		List<Post> results = (List<Post>) service.serve("search.post",htbl).get("results");
+		
+		List<Post> results =  (List<Post>) service.serve("search.post",htbl);
 
 		searchKey = searchKey.toLowerCase();
 		boolean check = false;
@@ -101,12 +102,13 @@ public class SearchEngineTest {
 	
 	
 	@Test
-	public void testSearchJobs() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException{
+	public void testSearchJobs() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException{
 		String searchKey = "Developer";
 		
 		HashMap<String,String> htbl =  new HashMap<String, String>();
 		htbl.put("searchKey", searchKey);
-		List<Job> results = (List<Job>) service.serve("search.job",htbl).get("results");
+
+		List<Job> results =  (List<Job>) service.serve("search.job",htbl);
 		
 		boolean check = false;
 		for(Job job : results){
@@ -124,6 +126,6 @@ public class SearchEngineTest {
 		dbSeed.deleteAllCompanies();
 		dbSeed.deleteAllJobs();
 		dbSeed.deleteAllPosts();
-		SearchEngine.shutdown();
+		Main.shutdown();
 	}
 }

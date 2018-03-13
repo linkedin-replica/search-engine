@@ -4,7 +4,7 @@ package com.linkedin.replica.serachEngine.models;
  * Company Model
  */
 public class Company {
-	private String companyID;
+	private String _key;
 	private String companyName;
 	private String industryType;
 	private String companyProfilePicture;
@@ -22,13 +22,13 @@ public class Company {
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
-
-	public String getCompanyID() {
-		return companyID;
+	
+	public String get_key() {
+		return _key;
 	}
 
-	public void setCompanyID(String companyID) {
-		this.companyID = companyID;
+	public void set_key(String _key) {
+		this._key = _key;
 	}
 
 	public String getIndustryType() {
@@ -77,13 +77,5 @@ public class Company {
 
 	public void setYearFounded(Long yearFounded) {
 		this.yearFounded = yearFounded;
-	}
-
-	@Override
-	public String toString() {
-		return "Company [companyID=" + companyID + ", companyName="
-				+ companyName + "]";
-	}
-
-	
+	}	
 }

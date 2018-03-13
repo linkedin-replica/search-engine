@@ -1,20 +1,18 @@
-package com.linkedin.replica.serachEngine.databaseHandlers.impl;
+package com.linkedin.replica.serachEngine.database.handlers.impl;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import com.arangodb.ArangoCursor;
 import com.arangodb.ArangoDB;
 import com.arangodb.util.MapBuilder;
 import com.linkedin.replica.serachEngine.config.Configuration;
-import com.linkedin.replica.serachEngine.config.DatabaseConnection;
-import com.linkedin.replica.serachEngine.databaseHandlers.DatabaseHandler;
+import com.linkedin.replica.serachEngine.database.DatabaseConnection;
+import com.linkedin.replica.serachEngine.database.handlers.SearchHandler;
 import com.linkedin.replica.serachEngine.models.Company;
 import com.linkedin.replica.serachEngine.models.Job;
 import com.linkedin.replica.serachEngine.models.User;
@@ -23,14 +21,13 @@ import com.linkedin.replica.serachEngine.models.Post;
 /**
  * Implementation of ArangoHandler which is responsible for serving specific request from ArangoDB
  */
-public class ArangoHandler implements DatabaseHandler{
-	private Properties properties;
+public class ArangoSearchHandler implements SearchHandler{
 	private ArangoDB arangoDB;
+	private String dbName;
 	
-	public ArangoHandler() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException{
+	public ArangoSearchHandler() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException {
 		arangoDB = DatabaseConnection.getInstance().getArangodb();
-		properties = new Properties();
-		properties.load(new FileInputStream(Configuration.getInstance().getArangoNamesConfigPath()));
+		dbName = Configuration.getInstance().getArangoConfig("db.name");
 	}
 	
 	/**
@@ -39,8 +36,7 @@ public class ArangoHandler implements DatabaseHandler{
 	 * 	return list of users
 	 */
 	public List<User> searchUsers(String name) {
-		String dbName = properties.getProperty("db.name");
-		String collectionName = properties.getProperty("collection.user.name");		
+		String collectionName = Configuration.getInstance().getArangoConfig("collection.users.name");	
 		
 		// lowerCase name to avoid case sensitive search
 		name = name.toLowerCase();
@@ -69,8 +65,7 @@ public class ArangoHandler implements DatabaseHandler{
 	 * 	return list of companies
 	 */
 	public List<Company> searchCompanies(String name) {
-		String dbName = properties.getProperty("db.name");
-		String collectionName = properties.getProperty("collection.company.name");
+		String collectionName = Configuration.getInstance().getArangoConfig("collection.companies.name");	
 		
 		// lowerCase name to avoid case sensitive search
 		name = name.toLowerCase();
@@ -97,8 +92,7 @@ public class ArangoHandler implements DatabaseHandler{
 	 * 	return list of posts
 	 */
 	public List<Post> searchPosts(String txt) {
-		String dbName = properties.getProperty("db.name");
-		String collectionName = properties.getProperty("collection.post.name");
+		String collectionName = Configuration.getInstance().getArangoConfig("collection.posts.name");	
 
 		// lowerCase name to avoid case sensitive search
 		txt = txt.toLowerCase();
@@ -126,8 +120,7 @@ public class ArangoHandler implements DatabaseHandler{
 	 * 	return list of jobs
 	 */
 	public List<Job> searchJobs(String title) {
-		String dbName = properties.getProperty("db.name");
-		String collectionName = properties.getProperty("collection.job.name");
+		String collectionName = Configuration.getInstance().getArangoConfig("collection.jobs.name");	
 		
 		// lowerCase name to avoid case sensitive search
 		title = title.toLowerCase();
