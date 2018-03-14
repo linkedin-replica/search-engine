@@ -36,7 +36,7 @@ public class ResponseEncoderHandler extends ChannelOutboundHandlerAdapter{
 		// construct FullHttpResponse
 		FullHttpResponse response = null;
 		if(responseType.equals(ResponseType.SuccessfulResponse))
-			response = new DefaultFullHttpResponse(HTTP_1_1, HttpResponseStatus.OK,
+			response = new DefaultFullHttpResponse(HTTP_1_1, HttpResponseStatus.ACCEPTED,
 					Unpooled.copiedBuffer(out.toString(CharsetUtil.UTF_8), CharsetUtil.UTF_8));
 		
 		if(responseType.equals(ResponseType.ErrorResponse))
@@ -45,7 +45,7 @@ public class ResponseEncoderHandler extends ChannelOutboundHandlerAdapter{
 		 
 		// set headers
 	    response.headers().set(CONTENT_TYPE, "application/json; charset=UTF-8");
-	    
+
 	    // write response to HttpResponseEncoder 
 		ChannelFuture future = ctx.writeAndFlush(response);
 		future.addListener(ChannelFutureListener.CLOSE);

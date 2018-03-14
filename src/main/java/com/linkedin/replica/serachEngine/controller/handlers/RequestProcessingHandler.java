@@ -19,7 +19,7 @@ public class RequestProcessingHandler extends ChannelInboundHandlerAdapter{
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		// JSONObject body that was decoded by RequestDecoderHandler
 		JsonObject body = (JsonObject) msg;
-		System.out.println(body.toString());
+
 		// pass body to ControllerService to serve the request
 		ControllerService.serve(body);
 
@@ -55,7 +55,7 @@ public class RequestProcessingHandler extends ChannelInboundHandlerAdapter{
 		
 		responseBody.put("errMessage", cause.getMessage());
 		
-		cause.printStackTrace();
+//		cause.printStackTrace();
 		// send response to ResponseEncoderHandler
 		ctx.writeAndFlush(responseBody);
 	}	

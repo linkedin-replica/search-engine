@@ -24,7 +24,7 @@ import io.netty.handler.codec.http.HttpResponseEncoder;
 public class Server {
 	private final String IP;
 	private final int PORT;
-	
+	private EventLoopGroup bossGroup;
 	public Server(String IP, int PORT){
 		this.IP = IP;
 		this.PORT = PORT;
@@ -32,7 +32,7 @@ public class Server {
 	
 	public void start() throws InterruptedException{
 		// Producer which is responsible for accepting connections
-        EventLoopGroup bossGroup = new NioEventLoopGroup();
+        bossGroup = new NioEventLoopGroup();
 		/*
 		 *  consumer which handles the traffic of the accepted connection once the boss accepts the connection.
 		 *  Boss (producer) registers the accepted connection to the worker (consumer).
@@ -86,6 +86,10 @@ public class Server {
 			bossGroup.shutdownGracefully();
 		}
     
+	}
+	
+	public void shutdown() throws InterruptedException{
+		bossGroup.shutdownGracefully().sync();
 	}
 	
 	public static void main(String[] args) throws InterruptedException, IOException {

@@ -80,6 +80,10 @@ public class Configuration {
     	return controllerConfig.getProperty(key);
     }
     
+    public String getCommandConfigProp(String key){
+    	return commandConfig.getProperty(key);
+    }
+    
     public void setAppControllerProp(String key, String val){
     	if(val != null)
     		appConfig.setProperty(key, val);

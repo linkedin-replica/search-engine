@@ -45,15 +45,22 @@ public class RequestDecoderHandler extends ChannelInboundHandlerAdapter{
 		/*
 		 * LastHttpContent has trailing headers which indicates the end of request.
 		 */
-		if(msg instanceof LastHttpContent){
+		if(msg instanceof LastHttpContent){	
+			// check if body was empty
+			if(builder.length() == 0)
+				throw new SearchException("Request Body must not be empty.");
+			
 			// decode request body content collected in builder into request object instance.
 			String json = builder.toString();
 			Gson gson = new Gson();
 			JsonObject body = gson.fromJson(json, JsonObject.class);
-
+		
+			// check if JSOn body is empty eg. {} 
+			if(body.getAsJsonObject().size() == 0)
+				throw new SearchException("Request Body must not be empty.");
+			
 			// reset builder
 			builder = new StringBuilder();
-			
 			// pass the decoded request to next channel in pipeline
 			ctx.fireChannelRead(body);
 		}
@@ -78,7 +85,8 @@ public class RequestDecoderHandler extends ChannelInboundHandlerAdapter{
 				responseBody.put("code", HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
 		
 		responseBody.put("errMessage", cause.getMessage());
-		
+	
+//		cause.printStackTrace();
 		// send response to ResponseEncoderHandler
 		ctx.writeAndFlush(responseBody);
 	}
