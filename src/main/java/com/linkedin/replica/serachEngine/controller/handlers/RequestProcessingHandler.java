@@ -1,13 +1,16 @@
 package com.linkedin.replica.serachEngine.controller.handlers;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.HashMap;
+import java.lang.reflect.Method;
+import java.nio.file.InvalidPathException;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 
-import com.linkedin.replica.serachEngine.models.ErrorResponseModel;
-import com.linkedin.replica.serachEngine.models.Request;
-import com.linkedin.replica.serachEngine.models.SuccessResponseModel;
-import com.linkedin.replica.serachEngine.services.SearchService;
+import org.json.simple.JSONObject;
+
+import com.linkedin.replica.serachEngine.Exceptions.SearchException;
+import com.linkedin.replica.serachEngine.config.Configuration;
+import com.linkedin.replica.serachEngine.models.ResponseType;
+import com.linkedin.replica.serachEngine.services.ControllerService;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -15,67 +18,78 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 
 
 public class RequestProcessingHandler extends ChannelInboundHandlerAdapter{
-	private static SearchService service;
-	
-	public  RequestProcessingHandler() throws FileNotFoundException, IOException {
-		super();
-		service = new SearchService();
-	}
 	
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		// request object being decoded by RequestDecoderHandler that was registered in channel pipeline before this handler
-		Request request = (Request) msg;
-		// validate request
-		validateRequest(request);
+		// JSONObject body that was decoded by RequestDecoderHandler
+		JSONObject body = (JSONObject) msg;
+
+		// iterate over request JSON body
+		Iterator<?> keySetIter = body.keySet().iterator();
+		String key, methodName;
+		while(keySetIter.hasNext()){
+			key = keySetIter.next().toString();
+			methodName = getControllerServiceMethodName(key);
+
+			// get method
+			Method method = ControllerService.class.getMethod(methodName, Object.class);
+			// invoke method, null because it is a static method
+			method.invoke(null, body.get(key));
+		}
 		
-		/*
-		 *  create arguments hashMap based on type of request. Here the same argument is used for all commands,
-		 *  so no need for checking for request type (switch block) and add arguments based on this check.
-		 */
-		HashMap<String,String> args =  new HashMap<String, String>();
-		args.put("searchKey", request.getSearchKey());
-		Object jsonRes = service.serve(request.getType().getCommandName(), args);
 
 		// create successful response
-		SuccessResponseModel response = new SuccessResponseModel();
-		response.setCode(HttpResponseStatus.OK.code());
-		response.setResults(jsonRes);
+		LinkedHashMap<String, Object> responseBody = new LinkedHashMap<String, Object>();
+		responseBody.put("type", ResponseType.SuccessfulResponse);
+		responseBody.put("code", HttpResponseStatus.ACCEPTED.code());
+		responseBody.put("message", "Changes are applied successfully and configuration files are updated");
 		
 		// send response to ResponseEncoderHandler
-		ctx.writeAndFlush(response);
-	}
-	
-	/**
-	 * Validate request body. For SearchEngine the same key/value pairs are the same for all implemented functionality.
-	 * 
-	 * @param request
-	 */
-	private void validateRequest(Request request){
-		String arg;
-		if(request.getType() == null || request.getSearchKey() == null){
-			arg = (request.getType() == null) ? "type" : "searchKey";
-			throw new IllegalArgumentException(String.format("Invalid request body. %s key/value is missing", arg));
-		}
+		ctx.writeAndFlush(responseBody);
 	}
 
+	/**
+	 * Maps requestBodykey to actual method name in controllerService class
+	 * 
+	 * @param requestBodykey
+	 * 	key in JSON body. eg. setMaxThreadCount
+	 * @return
+	 * 	ControllerService method name
+	 */
+	public static String getControllerServiceMethodName(String requestBodykey){
+		Configuration config = Configuration.getInstance();
+		// get mapping configuration key
+		String key = config.getControllerConfig("controller.request.body."+requestBodykey.toLowerCase());
+		if(key == null)
+			throw new SearchException(String.format("Invalid key: %s", requestBodykey));
+		
+		// ControllerService method name
+		return config.getControllerConfig(key);
+	}
+	
 	/**
 	 * Overriding exceptionCaught()  to react to any Throwable.
 	 */
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
 			throws Exception {
-		String errorJSON = String.format("\"errMessage\": %s", cause.getMessage());
-		
 		// construct Error Response
-		ErrorResponseModel response = new ErrorResponseModel();
-		response.setCode(HttpResponseStatus.BAD_REQUEST.code());
-		response.setMessage(errorJSON);
+		LinkedHashMap<String, Object> responseBody = new LinkedHashMap<String, Object>();
+		responseBody.put("type", ResponseType.ErrorResponse);
 		
+		// set Http status code
+		if(cause instanceof InvalidPathException)	
+			responseBody.put("code", HttpResponseStatus.NOT_FOUND.code());
+		else 
+			if (cause instanceof SearchException)
+				responseBody.put("code", HttpResponseStatus.BAD_REQUEST.code());
+			else
+				responseBody.put("code", HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+		
+		responseBody.put("errMessage", cause.getMessage());
+		
+		cause.printStackTrace();
 		// send response to ResponseEncoderHandler
-		ctx.writeAndFlush(response);
-	}
-	
-	
-	
+		ctx.writeAndFlush(responseBody);
+	}	
 }
