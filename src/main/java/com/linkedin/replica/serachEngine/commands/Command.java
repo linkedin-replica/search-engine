@@ -9,12 +9,16 @@ import com.linkedin.replica.serachEngine.database.handlers.SearchHandler;
  * external input and internal functionality implementation
  */
 public abstract class Command {
-    protected HashMap<String, String> args;
+    protected HashMap<String, Object> args;
     protected DatabaseHandler dbHandler;
     
-    public Command(HashMap<String, String> args, DatabaseHandler dbHandler) {
+    public Command(HashMap<String, Object> args, DatabaseHandler dbHandler) {
         this.args = args;
         this.dbHandler = dbHandler;
+    }
+    
+    public Command(HashMap<String, Object> args){
+    	this.args = args;
     }
     
     /**
@@ -22,7 +26,7 @@ public abstract class Command {
      * @return The output (if any) of the command
      * 	LinkedHashMap preserve order of insertion so it will preserve this order when parsing to JSON
      */
-    public abstract Object execute();
+    public abstract Object execute() throws Exception;
     
 	public void setDbHandler(SearchHandler dbHandler) {
 		this.dbHandler = dbHandler;
@@ -35,8 +39,4 @@ public abstract class Command {
 	                throw new IllegalArgumentException(exceptionMsg);
 	            }
 	    }
-	  
-	  public static void main(String[] args) {
-		System.out.println(Command.class.getPackage().getName());
-	}
 }

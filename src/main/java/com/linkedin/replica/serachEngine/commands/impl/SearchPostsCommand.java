@@ -13,8 +13,7 @@ import com.linkedin.replica.serachEngine.models.Post;
  */
 public class SearchPostsCommand extends Command{
 
-	public SearchPostsCommand(HashMap<String, String> args,
-			DatabaseHandler dbHandler) {
+	public SearchPostsCommand(HashMap<String, Object> args, DatabaseHandler dbHandler) {
 		super(args, dbHandler);
 	}
 
@@ -27,7 +26,7 @@ public class SearchPostsCommand extends Command{
 		validateArgs(new String[]{"searchKey"});
 		
 		// call dbHandler to get list of posts in db
-		List<Post> posts = dbHandler.searchPosts(args.get("searchKey"));
+		List<Post> posts = dbHandler.searchPosts(args.get("searchKey").toString());
 		return posts;
 	}
 }

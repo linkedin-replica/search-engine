@@ -27,7 +27,7 @@ public class ArangoSearchHandler implements SearchHandler{
 	
 	public ArangoSearchHandler() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException {
 		arangoDB = DatabaseConnection.getInstance().getArangodb();
-		dbName = Configuration.getInstance().getArangoConfig("db.name");
+		dbName = Configuration.getInstance().getArangoConfigProp("db.name");
 	}
 	
 	/**
@@ -36,7 +36,7 @@ public class ArangoSearchHandler implements SearchHandler{
 	 * 	return list of users
 	 */
 	public List<User> searchUsers(String name) {
-		String collectionName = Configuration.getInstance().getArangoConfig("collection.users.name");	
+		String collectionName = Configuration.getInstance().getArangoConfigProp("collection.users.name");	
 		
 		// lowerCase name to avoid case sensitive search
 		name = name.toLowerCase();
@@ -65,7 +65,7 @@ public class ArangoSearchHandler implements SearchHandler{
 	 * 	return list of companies
 	 */
 	public List<Company> searchCompanies(String name) {
-		String collectionName = Configuration.getInstance().getArangoConfig("collection.companies.name");	
+		String collectionName = Configuration.getInstance().getArangoConfigProp("collection.companies.name");	
 		
 		// lowerCase name to avoid case sensitive search
 		name = name.toLowerCase();
@@ -92,7 +92,7 @@ public class ArangoSearchHandler implements SearchHandler{
 	 * 	return list of posts
 	 */
 	public List<Post> searchPosts(String txt) {
-		String collectionName = Configuration.getInstance().getArangoConfig("collection.posts.name");	
+		String collectionName = Configuration.getInstance().getArangoConfigProp("collection.posts.name");	
 
 		// lowerCase name to avoid case sensitive search
 		txt = txt.toLowerCase();
@@ -120,7 +120,7 @@ public class ArangoSearchHandler implements SearchHandler{
 	 * 	return list of jobs
 	 */
 	public List<Job> searchJobs(String title) {
-		String collectionName = Configuration.getInstance().getArangoConfig("collection.jobs.name");	
+		String collectionName = Configuration.getInstance().getArangoConfigProp("collection.jobs.name");	
 		
 		// lowerCase name to avoid case sensitive search
 		title = title.toLowerCase();

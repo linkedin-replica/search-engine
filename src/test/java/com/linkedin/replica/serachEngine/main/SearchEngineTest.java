@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +41,7 @@ public class SearchEngineTest {
 	}
 	
 	@Test
-	public void testSearchUsers() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException{
+	public void testSearchUsers() throws Exception{
 		String searchKey = "hm";
 		HashMap<String,String> htbl =  new HashMap<String, String>();
 		htbl.put("searchKey", searchKey);
@@ -63,7 +62,7 @@ public class SearchEngineTest {
 	}
 	
 	@Test
-	public void testSearchCompanies() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException{
+	public void testSearchCompanies() throws Exception{
 		String searchKey = "Goo";
 		HashMap<String,String> htbl =  new HashMap<String, String>();
 		htbl.put("searchKey", searchKey);
@@ -81,7 +80,7 @@ public class SearchEngineTest {
 	}
 	
 	@Test
-	public void testSearchPosts() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException{
+	public void testSearchPosts() throws Exception{
 		String searchKey = "Lorem";
 		HashMap<String,String> htbl =  new HashMap<String, String>();
 		htbl.put("searchKey", searchKey);
@@ -102,7 +101,7 @@ public class SearchEngineTest {
 	
 	
 	@Test
-	public void testSearchJobs() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException{
+	public void testSearchJobs() throws Exception{
 		String searchKey = "Developer";
 		
 		HashMap<String,String> htbl =  new HashMap<String, String>();

@@ -1,45 +1,52 @@
 package com.linkedin.replica.serachEngine.services;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Iterator;
+
+import com.google.gson.JsonObject;
+import com.linkedin.replica.serachEngine.Exceptions.SearchException;
+import com.linkedin.replica.serachEngine.commands.impl.ControllerCommand;
 import com.linkedin.replica.serachEngine.config.Configuration;
 
 public class ControllerService {
-	private final static Configuration config = Configuration.getInstance();
-	
-	public static void setMaxThreadCount(Object val){
-		Double maxThreadCount = (Double) val;
-		System.out.println(maxThreadCount);
-	}
-	
-	public static void setMaxDBConnectionsCount(Object val){
-		Double maxDBConnectionCount = (Double) val;
-		System.out.println(maxDBConnectionCount);
-	}
-	
-	public static void addCommand(Object val){
+	public static void serve(JsonObject body) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException{
+		// iterate over request JSON body
+		Iterator<?> keySetIter = body.keySet().iterator();
+		String key, methodName;
+		HashMap<String, Object> args = new HashMap<String, Object>();
+		ControllerCommand controllerCommand = new ControllerCommand(args);
+
+		while(keySetIter.hasNext()){
+			key = keySetIter.next().toString();
+			methodName = getControllerServiceMethodName(key);
+			
+			args.put("methodName", methodName);
+			args.put("param", body.get(key));
+			controllerCommand.execute();
+		}
 		
+		// write any changes to configuration files
+		Configuration.getInstance().commit();
 	}
 	
-	public static void deleteCommand(Object val){
+	/**
+	 * Maps requestBodykey to actual method name in controllerService class
+	 * 
+	 * @param requestBodykey
+	 * 	key in JSON body. eg. setMaxThreadCount
+	 * @return
+	 * 	ControllerService method name
+	 */
+	public static String getControllerServiceMethodName(String requestBodykey){
+		Configuration config = Configuration.getInstance();
+		// get mapping configuration key
+		String key = config.getControllerConfigProp("controller.request.body."+requestBodykey.toLowerCase());
+		if(key == null)
+			throw new SearchException(String.format("Invalid key: %s", requestBodykey));
 		
-	}
-	
-	public static void updateCommand(Object val){
-		
-	}
-	
-	public static void updateClass(Object val){
-		
-	}
-	
-	public static void freeze(Object val){
-		
-	}
-	
-	public static void resume(Object val){
-		
-	}
-	
-	public static void setErrorReportingLevel(Object val){
-		
+		// ControllerService method name
+		return config.getControllerConfigProp(key);
 	}
 }

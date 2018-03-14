@@ -2,10 +2,8 @@ package com.linkedin.replica.serachEngine.controller.handlers;
 
 import java.nio.file.InvalidPathException;
 import java.util.LinkedHashMap;
-
-import org.json.simple.JSONObject;
-
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.linkedin.replica.serachEngine.Exceptions.SearchException;
 import com.linkedin.replica.serachEngine.models.ResponseType;
 
@@ -51,7 +49,7 @@ public class RequestDecoderHandler extends ChannelInboundHandlerAdapter{
 			// decode request body content collected in builder into request object instance.
 			String json = builder.toString();
 			Gson gson = new Gson();
-			JSONObject body = gson.fromJson(json, JSONObject.class);
+			JsonObject body = gson.fromJson(json, JsonObject.class);
 
 			// reset builder
 			builder = new StringBuilder();

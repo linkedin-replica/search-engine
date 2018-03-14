@@ -13,8 +13,7 @@ import com.linkedin.replica.serachEngine.models.User;
  */
 public class SearchUserCommand extends Command{
 
-	public SearchUserCommand(HashMap<String, String> args,
-			DatabaseHandler dbHandler) {
+	public SearchUserCommand(HashMap<String, Object> args, DatabaseHandler dbHandler) {
 		super(args, dbHandler);
 	}
 
@@ -27,7 +26,7 @@ public class SearchUserCommand extends Command{
 		validateArgs(new String[]{"searchKey"});
 		
 		// call dbHandler to get list of users from db.
-		List<User> users = dbHandler.searchUsers(args.get("searchKey"));
+		List<User> users = dbHandler.searchUsers(args.get("searchKey").toString());
 		return users;
 	}
 }
