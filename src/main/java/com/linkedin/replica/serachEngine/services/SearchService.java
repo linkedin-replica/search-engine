@@ -3,7 +3,6 @@ package com.linkedin.replica.serachEngine.services;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 import com.linkedin.replica.serachEngine.commands.Command;
@@ -25,7 +24,7 @@ public class SearchService {
         config = Configuration.getInstance();
 	}
 		
-	public  Object serve(String commandName, HashMap<String, String> args) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+	public  Object serve(String commandName, HashMap<String, String> args) throws Exception {
 
         Class<?> dbHandlerClass = config.getHandlerClass(commandName);
         DatabaseHandler dbHandler = (DatabaseHandler) dbHandlerClass.newInstance();

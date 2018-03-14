@@ -13,7 +13,7 @@ import com.linkedin.replica.serachEngine.models.Company;
  */
 public class SearchCompaniesCommand extends Command{
 	
-	public SearchCompaniesCommand (HashMap<String, String> args, DatabaseHandler dbHandler){
+	public SearchCompaniesCommand (HashMap<String, Object> args, DatabaseHandler dbHandler){
 		super(args,dbHandler);
 	}
 	
@@ -26,7 +26,7 @@ public class SearchCompaniesCommand extends Command{
 		validateArgs(new String[]{"searchKey"});
 		
 		// call dbHandler to get list of companies from db 
-		List<Company> companies = dbHandler.searchCompanies(args.get("searchKey"));
+		List<Company> companies = dbHandler.searchCompanies(args.get("searchKey").toString());
 		return companies;
 	}
 }

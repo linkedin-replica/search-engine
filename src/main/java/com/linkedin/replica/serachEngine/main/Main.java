@@ -20,7 +20,7 @@ public class Main {
 	 */
 	public static void testingStart(String... args) throws FileNotFoundException, ClassNotFoundException, IOException, SQLException{
 		// create singleton instance of Configuration class that will hold configuration files paths
-		Configuration.init(args[0], args[1], args[2]);
+		Configuration.init(args[0], args[1], args[2],args[3]);
 		
 		// create singleton instance of DatabaseConnection class that is responsible for intiating connections
 		// with databases
@@ -28,19 +28,19 @@ public class Main {
 	}
 	
 	public static void start(String... args) throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InterruptedException{
-		if(args.length != 5)
-			throw new IllegalArgumentException("Expected three arguments. 1- app config file path "
-					+ "2- database file path  3-   commands path 4- host 5- port");
+		if(args.length != 6)
+			throw new IllegalArgumentException("Expected three arguments. 1- app config file path \n "
+					+ "2- database config file path \n  3- commands config file path \n 4- controller config file path \n 5- host \n 6- port");
 		
 		// create singleton instance of Configuration class that will hold configuration files paths
-		Configuration.init(args[0], args[1], args[2]);
+		Configuration.init(args[0], args[1], args[2], args[3]);
 		
 		// create singleton instance of DatabaseConnection class that is responsible for intiating connections
 		// with databases
 		DatabaseConnection.init();
 		
 		// start server
-		Server server = new Server(args[3], Integer.parseInt(args[4]));
+		Server server = new Server(args[4], Integer.parseInt(args[5]));
 		server.start();
 	}
 	

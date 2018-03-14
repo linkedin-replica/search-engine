@@ -11,7 +11,6 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -22,7 +21,7 @@ import io.netty.handler.codec.http.HttpResponseEncoder;
 public class Server {
 	private final String IP;
 	private final int PORT;
-	
+	private EventLoopGroup bossGroup;
 	public Server(String IP, int PORT){
 		this.IP = IP;
 		this.PORT = PORT;
@@ -30,7 +29,7 @@ public class Server {
 	
 	public void start() throws InterruptedException{
 		// Producer which is responsible for accepting connections
-        EventLoopGroup bossGroup = new NioEventLoopGroup();
+        bossGroup = new NioEventLoopGroup();
 		/*
 		 *  consumer which handles the traffic of the accepted connection once the boss accepts the connection.
 		 *  Boss (producer) registers the accepted connection to the worker (consumer).
@@ -83,6 +82,10 @@ public class Server {
 			workerGroup.shutdownGracefully();
 			bossGroup.shutdownGracefully();
 		}
-        
+    
+	}
+	
+	public void shutdown() throws InterruptedException{
+		bossGroup.shutdownGracefully().sync();
 	}
 }
