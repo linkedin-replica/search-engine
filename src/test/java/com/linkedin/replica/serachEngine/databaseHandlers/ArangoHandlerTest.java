@@ -26,7 +26,7 @@ public class ArangoHandlerTest {
 	@BeforeClass
 	public static void setup() throws ClassNotFoundException, IOException, SQLException, InterruptedException{
 		// startup SearchEngine 
-		String[] args = {"src/main/resources/app.config","src/main/resources/arango.test.config", "src/main/resources/commands.config"};
+		String[] args = {"src/main/resources/app.config","src/main/resources/arango.test.config", "src/main/resources/commands.config", "src/main/resources/controller.config"};
 		Main.testingStart(args);
 		
 		dbSeed = new DatabaseSeed();

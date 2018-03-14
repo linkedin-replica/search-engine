@@ -83,6 +83,11 @@ public class Server {
 			workerGroup.shutdownGracefully();
 			bossGroup.shutdownGracefully();
 		}
-        
+    
+	}
+	
+	public static void main(String[] args) throws InterruptedException {
+		Server server = new Server("localhost", 8080);
+		server.start();
 	}
 }

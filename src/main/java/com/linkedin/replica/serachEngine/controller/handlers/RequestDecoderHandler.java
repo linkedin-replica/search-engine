@@ -6,17 +6,27 @@ import com.linkedin.replica.serachEngine.models.Request;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.HttpContent;
+import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.LastHttpContent;
 import io.netty.util.CharsetUtil;
 
 public class RequestDecoderHandler extends ChannelInboundHandlerAdapter{
-	StringBuilder builder = new StringBuilder();
+	private final StringBuilder builder = new StringBuilder();
 	
 	
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg)
 			throws Exception {
 		
+		/*
+		 * check if request is valid
+		 */
+		if(msg instanceof HttpRequest){
+			HttpRequest httpRequest = (HttpRequest) msg;
+			System.out.println(httpRequest.uri());
+			
+		}
+			
 		/*
 		 * HttpContent holds the request body content. A request may have more than HttpContent block so
 		 * builder will collect all HttpContents.

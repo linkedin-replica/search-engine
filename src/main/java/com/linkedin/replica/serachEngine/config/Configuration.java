@@ -12,21 +12,23 @@ public class Configuration {
     private final Properties commandConfig = new Properties();
     private final Properties appConfig = new Properties();
     private final Properties arangoConfig = new Properties();
-  
+    private final Properties controllerConfig = new Properties();
+    
 	private static Configuration instance;
  	
-	private Configuration(String appConfigPath, String arangoConfigPath, String commandsConfigPath) throws IOException {
+	private Configuration(String appConfigPath, String arangoConfigPath, String commandsConfigPath, String controllerConfigPath) throws IOException {
         populateWithConfig(appConfigPath, appConfig);
         populateWithConfig(arangoConfigPath, arangoConfig);
         populateWithConfig(commandsConfigPath, commandConfig);
+        populateWithConfig(controllerConfigPath, controllerConfig);
 	}
 	
 	public static Configuration getInstance() {
 		return instance;
 	}
 
-    public static void init(String appConfigPath, String arangoConfigPath, String commandsConfigPath) throws IOException {
-        instance = new Configuration(appConfigPath, arangoConfigPath, commandsConfigPath);
+    public static void init(String appConfigPath, String arangoConfigPath, String commandsConfigPath, String controllerConfigPath) throws IOException {
+        instance = new Configuration(appConfigPath, arangoConfigPath, commandsConfigPath, controllerConfigPath);
     }
     
     private static void populateWithConfig(String configFilePath, Properties properties) throws IOException {
@@ -53,5 +55,9 @@ public class Configuration {
 
     public String getArangoConfig(String key) {
         return arangoConfig.getProperty(key);
+    }
+    
+    public String getControllerConfig(String key){
+    	return controllerConfig.getProperty(key);
     }
 }
