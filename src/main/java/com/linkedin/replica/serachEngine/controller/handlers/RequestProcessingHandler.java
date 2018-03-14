@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 
 import com.google.gson.JsonObject;
 import com.linkedin.replica.serachEngine.Exceptions.SearchException;
-import com.linkedin.replica.serachEngine.models.ResponseType;
 import com.linkedin.replica.serachEngine.services.ControllerService;
 
 import io.netty.channel.ChannelHandlerContext;
@@ -25,7 +24,7 @@ public class RequestProcessingHandler extends ChannelInboundHandlerAdapter{
 
 		// create successful response
 		LinkedHashMap<String, Object> responseBody = new LinkedHashMap<String, Object>();
-		responseBody.put("type", ResponseType.SuccessfulResponse);
+		responseBody.put("type", HttpResponseStatus.ACCEPTED);
 		responseBody.put("code", HttpResponseStatus.ACCEPTED.code());
 		responseBody.put("message", "Changes are applied successfully and configuration files are updated");
 		
@@ -42,17 +41,20 @@ public class RequestProcessingHandler extends ChannelInboundHandlerAdapter{
 			throws Exception {
 		// construct Error Response
 		LinkedHashMap<String, Object> responseBody = new LinkedHashMap<String, Object>();
-		responseBody.put("type", ResponseType.ErrorResponse);
 		
 		// set Http status code
-		if(cause instanceof InvalidPathException)	
+		if(cause instanceof InvalidPathException){
 			responseBody.put("code", HttpResponseStatus.NOT_FOUND.code());
-		else 
-			if (cause instanceof SearchException)
+			responseBody.put("type", HttpResponseStatus.NOT_FOUND);
+		}else{ 
+			if (cause instanceof SearchException){
 				responseBody.put("code", HttpResponseStatus.BAD_REQUEST.code());
-			else
+				responseBody.put("type", HttpResponseStatus.BAD_REQUEST);
+			}else{
 				responseBody.put("code", HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
-		
+				responseBody.put("type", HttpResponseStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
 		responseBody.put("errMessage", cause.getMessage());
 		
 //		cause.printStackTrace();

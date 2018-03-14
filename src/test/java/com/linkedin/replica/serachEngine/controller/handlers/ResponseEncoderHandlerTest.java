@@ -1,11 +1,8 @@
 package com.linkedin.replica.serachEngine.controller.handlers;
 
-import java.nio.charset.Charset;
 import java.util.LinkedHashMap;
 
 import org.junit.Test;
-
-import com.linkedin.replica.serachEngine.models.ResponseType;
 
 import io.netty.channel.embedded.EmbeddedChannel;
 import io.netty.handler.codec.http.FullHttpResponse;
@@ -21,7 +18,7 @@ public class ResponseEncoderHandlerTest {
 	public void testEncodingSuccessfulResponse(){
 		// create successful response
 		LinkedHashMap<String, Object> htblResponseBody = new LinkedHashMap<String, Object>();
-		htblResponseBody.put("type", ResponseType.SuccessfulResponse);
+		htblResponseBody.put("type", HttpResponseStatus.ACCEPTED);
 		htblResponseBody.put("code", HttpResponseStatus.ACCEPTED.code());
 		htblResponseBody.put("message", "Changes are applied successfully and configuration files are updated");
 	
@@ -38,7 +35,7 @@ public class ResponseEncoderHandlerTest {
 	public void testEncodingErrorResponse(){
 		// create successful response
 		LinkedHashMap<String, Object> htblResponseBody = new LinkedHashMap<String, Object>();
-		htblResponseBody.put("type", ResponseType.ErrorResponse);
+		htblResponseBody.put("type", HttpResponseStatus.BAD_REQUEST);
 		htblResponseBody.put("code", HttpResponseStatus.BAD_REQUEST.code());
 		htblResponseBody.put("errMessage", "Access Denied, forbidden request");
 	

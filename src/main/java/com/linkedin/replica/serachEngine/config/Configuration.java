@@ -137,5 +137,6 @@ public class Configuration {
     	Files.deleteIfExists(Paths.get(filePath));
     	OutputStream out = new FileOutputStream(filePath);
     	properties.store(out, "");
+    	out.close();
     }
 }

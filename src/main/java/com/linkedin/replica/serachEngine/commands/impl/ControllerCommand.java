@@ -11,7 +11,6 @@ import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -21,13 +20,11 @@ import com.linkedin.replica.serachEngine.commands.Command;
 import com.linkedin.replica.serachEngine.config.Configuration;
 
 public class ControllerCommand extends Command {
+	private static Configuration config = Configuration.getInstance();
+
 	public ControllerCommand(HashMap<String, Object> args) {
 		super(args);
 	}
-
-	private static Configuration config = Configuration.getInstance();
-
-
 
 	@Override
 	public Object execute() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
@@ -147,7 +144,6 @@ public class ControllerCommand extends Command {
 		String s = obj.get("bytes").toString().replaceAll("\"", "");
 		String packageName = obj.get("packageName").toString().replaceAll("\"", "");
 		String fileName = obj.get("fileName").toString().replaceAll("\"", "");
-//		String commandConfigPropKey = obj.get("configPropKey").toString().replaceAll("\"", "");
 
 		// decode to bytes to write file
 		byte[] bytes = Base64.getDecoder().decode(s);
@@ -223,28 +219,5 @@ public class ControllerCommand extends Command {
 		Path path = Paths.get(folderPath + "/" + packageName + "/" + fileName+".class");
 		// delete file if exist to avoid throwing FileAlreadyExistsException  
 		Files.deleteIfExists(path);
-	}
-	
-	public static void main(String[] args) throws IOException {
-		String[] a = {"src/main/resources/app.config","src/main/resources/arango.test.config", "src/main/resources/commands.config", "src/main/resources/controller.config"};
-		Configuration.init(a[0], a[1], a[2], a[3]);
-		config = Configuration.getInstance();
-		
-		Path path = Paths.get("test.class");
-		LinkedHashMap<String, Object> htbl = new LinkedHashMap<String, Object>();
-		htbl.put("fileName", "test");
-		byte[] bytes = Files.readAllBytes(path);
-		String s = Base64.getEncoder().encodeToString(bytes);
-		htbl.put("bytes", s);
-		htbl.put("configPropKey", "search.test");
-		htbl.put("handler", "ArangoSearchHandler");
-		Gson gson = new Gson();
-		String json = gson.toJson(htbl);
-		System.out.println(json);
-		ControllerCommand.addCommand(json);
-		config.commit();
-		
-		ControllerCommand.deleteCommand(json);
-		config.commit();
 	}
 }

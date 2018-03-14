@@ -1,6 +1,5 @@
 package com.linkedin.replica.serachEngine.controller.handlers;
 
-
 import java.util.LinkedHashMap;
 
 import org.junit.Test;
@@ -8,7 +7,6 @@ import org.junit.Test;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.linkedin.replica.serachEngine.controller.handlers.RequestDecoderHandler;
-import com.linkedin.replica.serachEngine.models.ResponseType;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -16,6 +14,7 @@ import io.netty.channel.embedded.EmbeddedChannel;
 import io.netty.handler.codec.http.DefaultFullHttpRequest;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpMethod;
+import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -89,7 +88,7 @@ public class RequestDecoderHandlerTest {
 		
 		// get error response create after catching exception
 		LinkedHashMap<String, Object> err = channel.readOutbound();
-		assertEquals("Wrong type", ResponseType.ErrorResponse, (ResponseType)err.get("type"));
+		assertEquals("Wrong type",HttpResponseStatus.BAD_REQUEST, (HttpResponseStatus)err.get("type"));
 		assertEquals("Wrong error code", 400, err.get("code"));
 		assertEquals("Wrong error errMessage", "Request Body must not be empty.", err.get("errMessage"));
 	}
@@ -120,7 +119,7 @@ public class RequestDecoderHandlerTest {
 		
 		// get error response create after catching exception
 		LinkedHashMap<String, Object> err = channel.readOutbound();
-		assertEquals("Wrong type", ResponseType.ErrorResponse, (ResponseType)err.get("type"));
+		assertEquals("Wrong type", HttpResponseStatus.NOT_FOUND, (HttpResponseStatus)err.get("type"));
 		assertEquals("Wrong error code", 404, err.get("code"));
 		assertEquals("Wrong error errMessage", "Access Denied, forbidden request: xyz", err.get("errMessage"));
 

@@ -1,9 +1,7 @@
 package com.linkedin.replica.serachEngine.controller;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 
-import com.linkedin.replica.serachEngine.config.Configuration;
 import com.linkedin.replica.serachEngine.controller.handlers.RequestDecoderHandler;
 import com.linkedin.replica.serachEngine.controller.handlers.RequestProcessingHandler;
 import com.linkedin.replica.serachEngine.controller.handlers.ResponseEncoderHandler;
@@ -13,7 +11,6 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -90,12 +87,5 @@ public class Server {
 	
 	public void shutdown() throws InterruptedException{
 		bossGroup.shutdownGracefully().sync();
-	}
-	
-	public static void main(String[] args) throws InterruptedException, IOException {
-		String[] a = {"src/main/resources/app.config","src/main/resources/arango.test.config", "src/main/resources/commands.config", "src/main/resources/controller.config"};
-		Configuration.init(a[0], a[1], a[2], a[3]);
-		Server server = new Server("localhost", 8080);
-		server.start();
 	}
 }

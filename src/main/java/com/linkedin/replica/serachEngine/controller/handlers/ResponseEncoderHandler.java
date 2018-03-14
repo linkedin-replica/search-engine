@@ -3,7 +3,6 @@ package com.linkedin.replica.serachEngine.controller.handlers;
 import java.util.LinkedHashMap;
 
 import com.google.gson.Gson;
-import com.linkedin.replica.serachEngine.models.ResponseType;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -24,7 +23,7 @@ public class ResponseEncoderHandler extends ChannelOutboundHandlerAdapter{
 	@Override
 	public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
 		LinkedHashMap<String, Object> responseBody = (LinkedHashMap<String, Object>) msg;
-		ResponseType responseType = (ResponseType) responseBody.remove("type");
+		HttpResponseStatus status = (HttpResponseStatus) responseBody.remove("type");
 		
 		// convert to JSON string
 		Gson gson = new Gson();
@@ -32,17 +31,9 @@ public class ResponseEncoderHandler extends ChannelOutboundHandlerAdapter{
 		// wrap msg in ByteBuf
 		ByteBuf out = Unpooled.wrappedBuffer(body.getBytes());
 
-		
 		// construct FullHttpResponse
-		FullHttpResponse response = null;
-		if(responseType.equals(ResponseType.SuccessfulResponse))
-			response = new DefaultFullHttpResponse(HTTP_1_1, HttpResponseStatus.ACCEPTED,
-					Unpooled.copiedBuffer(out.toString(CharsetUtil.UTF_8), CharsetUtil.UTF_8));
-		
-		if(responseType.equals(ResponseType.ErrorResponse))
-			response = new DefaultFullHttpResponse(HTTP_1_1, HttpResponseStatus.BAD_REQUEST,
-					Unpooled.copiedBuffer(out.toString(CharsetUtil.UTF_8), CharsetUtil.UTF_8));
-		 
+		FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, status,
+					Unpooled.copiedBuffer(out.toString(CharsetUtil.UTF_8), CharsetUtil.UTF_8));		 
 		// set headers
 	    response.headers().set(CONTENT_TYPE, "application/json; charset=UTF-8");
 

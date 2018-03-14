@@ -16,9 +16,9 @@ import org.junit.Test;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.linkedin.replica.serachEngine.config.Configuration;
-import com.linkedin.replica.serachEngine.models.ResponseType;
 
 import io.netty.channel.embedded.EmbeddedChannel;
+import io.netty.handler.codec.http.HttpResponseStatus;
 
 public class RequestProcessingHandlerTest {
 	private EmbeddedChannel channel;
@@ -46,7 +46,7 @@ public class RequestProcessingHandlerTest {
 		
 		// get response created after handling requests
 		LinkedHashMap<String, Object> response = channel.readOutbound();
-		assertEquals("Wrong type", ResponseType.SuccessfulResponse, (ResponseType)response.get("type"));
+		assertEquals("Wrong type", HttpResponseStatus.ACCEPTED, (HttpResponseStatus)response.get("type"));
 		assertEquals("Wrong code", 202, response.get("code"));
 		assertEquals("Wrong message", "Changes are applied successfully and configuration files are updated", response.get("message"));
 	}
@@ -58,7 +58,7 @@ public class RequestProcessingHandlerTest {
 		
 		// get response created after handling requests
 		LinkedHashMap<String, Object> response = channel.readOutbound();
-		assertEquals("Wrong type", ResponseType.SuccessfulResponse, (ResponseType)response.get("type"));
+		assertEquals("Wrong type", HttpResponseStatus.ACCEPTED, (HttpResponseStatus)response.get("type"));
 		assertEquals("Wrong code", 202, response.get("code"));
 		assertEquals("Wrong message", "Changes are applied successfully and configuration files are updated", response.get("message"));
 		
@@ -102,7 +102,7 @@ public class RequestProcessingHandlerTest {
 		
 		// get response created after handling requests
 		LinkedHashMap<String, Object> response = channel.readOutbound();
-		assertEquals("Wrong type", ResponseType.SuccessfulResponse, (ResponseType)response.get("type"));
+		assertEquals("Wrong type", HttpResponseStatus.ACCEPTED, (HttpResponseStatus)response.get("type"));
 		assertEquals("Wrong code", 202, response.get("code"));
 		assertEquals("Wrong message", "Changes are applied successfully and configuration files are updated", response.get("message"));
 		
@@ -158,7 +158,7 @@ public class RequestProcessingHandlerTest {
 		// get error response create after catching exception
 		LinkedHashMap<String, Object> err = channel.readOutbound();
 		System.out.println(err);
-		assertEquals("Wrong type", ResponseType.ErrorResponse, (ResponseType)err.get("type"));
+		assertEquals("Wrong type", HttpResponseStatus.BAD_REQUEST, (HttpResponseStatus)err.get("type"));
 		assertEquals("Wrong code", 400, err.get("code"));
 		assertEquals("Wrong errMessage", "Invalid parameters : [fileName, bytes, handler]. expected : [fileName, configPropKey, handler, bytes]", err.get("errMessage"));
 	}

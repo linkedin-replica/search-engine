@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.linkedin.replica.serachEngine.Exceptions.SearchException;
-import com.linkedin.replica.serachEngine.models.ResponseType;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -73,17 +72,20 @@ public class RequestDecoderHandler extends ChannelInboundHandlerAdapter{
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		// construct Error Response
 		LinkedHashMap<String, Object> responseBody = new LinkedHashMap<String, Object>();
-		responseBody.put("type", ResponseType.ErrorResponse);
 		
 		// set Http status code
-		if(cause instanceof InvalidPathException)	
+		if(cause instanceof InvalidPathException){
 			responseBody.put("code", HttpResponseStatus.NOT_FOUND.code());
-		else 
-			if (cause instanceof SearchException)
+			responseBody.put("type", HttpResponseStatus.NOT_FOUND);
+		}else{ 
+			if (cause instanceof SearchException){
 				responseBody.put("code", HttpResponseStatus.BAD_REQUEST.code());
-			else
+				responseBody.put("type", HttpResponseStatus.BAD_REQUEST);
+			}else{
 				responseBody.put("code", HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
-		
+				responseBody.put("type", HttpResponseStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
 		responseBody.put("errMessage", cause.getMessage());
 	
 //		cause.printStackTrace();
