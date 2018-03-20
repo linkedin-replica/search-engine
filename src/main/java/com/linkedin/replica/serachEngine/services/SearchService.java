@@ -17,15 +17,9 @@ import com.linkedin.replica.serachEngine.database.handlers.DatabaseHandler;
  * It will call command execute method after passing to its DatabaseHandler
  */
 public class SearchService {
-    private Configuration config;
-
-	
-	public SearchService() throws FileNotFoundException, IOException{
-        config = Configuration.getInstance();
-	}
+    private Configuration config = Configuration.getInstance();
 		
 	public  Object serve(String commandName, HashMap<String, String> args) throws Exception {
-
         Class<?> dbHandlerClass = config.getHandlerClass(commandName);
         DatabaseHandler dbHandler = (DatabaseHandler) dbHandlerClass.newInstance();
 

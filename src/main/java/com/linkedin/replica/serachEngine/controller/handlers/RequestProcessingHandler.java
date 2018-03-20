@@ -4,7 +4,7 @@ import java.nio.file.InvalidPathException;
 import java.util.LinkedHashMap;
 
 import com.google.gson.JsonObject;
-import com.linkedin.replica.serachEngine.Exceptions.SearchException;
+import com.linkedin.replica.serachEngine.exceptions.SearchException;
 import com.linkedin.replica.serachEngine.services.ControllerService;
 
 import io.netty.channel.ChannelHandlerContext;

@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import com.google.gson.JsonObject;
-import com.linkedin.replica.serachEngine.Exceptions.SearchException;
 import com.linkedin.replica.serachEngine.commands.impl.ControllerCommand;
 import com.linkedin.replica.serachEngine.config.Configuration;
+import com.linkedin.replica.serachEngine.exceptions.SearchException;
 
 public class ControllerService {
 	public static void serve(JsonObject body) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException{

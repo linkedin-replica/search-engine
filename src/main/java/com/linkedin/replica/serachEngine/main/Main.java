@@ -3,10 +3,12 @@ package com.linkedin.replica.serachEngine.main;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.concurrent.TimeoutException;
 
 import com.linkedin.replica.serachEngine.config.Configuration;
 import com.linkedin.replica.serachEngine.controller.Server;
 import com.linkedin.replica.serachEngine.database.DatabaseConnection;
+import com.linkedin.replica.serachEngine.messaging.MessageReceiver;
 
 public class Main {
 	
@@ -27,10 +29,10 @@ public class Main {
 		DatabaseConnection.init();
 	}
 	
-	public static void start(String... args) throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InterruptedException{
-		if(args.length != 6)
+	public static void start(String... args) throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InterruptedException, TimeoutException{
+		if(args.length != 4)
 			throw new IllegalArgumentException("Expected three arguments. 1- app config file path \n "
-					+ "2- database config file path \n  3- commands config file path \n 4- controller config file path \n 5- host \n 6- port");
+					+ "2- database config file path \n  3- commands config file path \n 4- controller config file path");
 		
 		// create singleton instance of Configuration class that will hold configuration files paths
 		Configuration.init(args[0], args[1], args[2], args[3]);
@@ -38,17 +40,28 @@ public class Main {
 		// create singleton instance of DatabaseConnection class that is responsible for intiating connections
 		// with databases
 		DatabaseConnection.init();
-		
+		// start RabbitMQ
+		new MessageReceiver();
 		// start server
-		Server server = new Server(args[4], Integer.parseInt(args[5]));
-		server.start();
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				try {
+					new Server().start();
+				} catch (InterruptedException e) {
+					//TODO logging
+				}		
+			}
+		}).start();
 	}
 	
 	public static void shutdown() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException{
 		DatabaseConnection.getInstance().closeConnections();
 	}
 	
-	public static void main(String[] args) throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InterruptedException {
-		start(args);
+	public static void main(String[] args) throws FileNotFoundException, ClassNotFoundException, IOException, SQLException, InterruptedException, TimeoutException {
+		String[] arr = {"src/main/resources/app.config","src/main/resources/arango.test.config", "src/main/resources/commands.config", "src/main/resources/controller.config"};
+		start(arr);
 	}
 }

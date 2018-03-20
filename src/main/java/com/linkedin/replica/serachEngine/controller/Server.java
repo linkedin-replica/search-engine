@@ -2,6 +2,7 @@ package com.linkedin.replica.serachEngine.controller;
 
 import java.net.InetSocketAddress;
 
+import com.linkedin.replica.serachEngine.config.Configuration;
 import com.linkedin.replica.serachEngine.controller.handlers.RequestDecoderHandler;
 import com.linkedin.replica.serachEngine.controller.handlers.RequestProcessingHandler;
 import com.linkedin.replica.serachEngine.controller.handlers.ResponseEncoderHandler;
@@ -22,9 +23,15 @@ public class Server {
 	private final String IP;
 	private final int PORT;
 	private EventLoopGroup bossGroup;
+	
 	public Server(String IP, int PORT){
 		this.IP = IP;
 		this.PORT = PORT;
+	}
+	
+	public Server(){
+		this.IP = Configuration.getInstance().getAppConfigProp("app.controller.host");
+		this.PORT = Integer.parseInt(Configuration.getInstance().getAppConfigProp("app.controller.port"));
 	}
 	
 	public void start() throws InterruptedException{
@@ -60,10 +67,9 @@ public class Server {
         			
 			// Bind and start to accept incoming connections.
         	InetSocketAddress socketAddress = new InetSocketAddress(IP, PORT);
-			ChannelFuture future = server.bind(socketAddress);
+			final ChannelFuture future = server.bind(socketAddress);
 			future.addListener(new ChannelFutureListener() {
 				
-				@Override
 				public void operationComplete(ChannelFuture ch) throws Exception {
 						if(ch.isSuccess()){
 							System.out.println("Server started at Host = "+IP +" and Port = "+PORT);
