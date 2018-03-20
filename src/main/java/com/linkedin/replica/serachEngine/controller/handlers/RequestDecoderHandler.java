@@ -2,9 +2,10 @@ package com.linkedin.replica.serachEngine.controller.handlers;
 
 import java.nio.file.InvalidPathException;
 import java.util.LinkedHashMap;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.linkedin.replica.serachEngine.Exceptions.SearchException;
+import com.linkedin.replica.serachEngine.exceptions.SearchException;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

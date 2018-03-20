@@ -15,9 +15,10 @@ import java.util.HashMap;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import com.linkedin.replica.serachEngine.Exceptions.SearchException;
 import com.linkedin.replica.serachEngine.commands.Command;
 import com.linkedin.replica.serachEngine.config.Configuration;
+import com.linkedin.replica.serachEngine.exceptions.SearchException;
+import com.linkedin.replica.serachEngine.services.Workers;
 
 public class ControllerCommand extends Command {
 	private static Configuration config = Configuration.getInstance();
@@ -52,6 +53,9 @@ public class ControllerCommand extends Command {
 		
 		int maxThreadCount = ((JsonPrimitive) val).getAsInt();
 		config.setAppControllerProp("app.max_thread_count", maxThreadCount+"");
+		
+		// set number of threads of workers' pool
+		Workers.getInstance().setNumThreads(maxThreadCount);
 	}
 	
 	/**
@@ -64,6 +68,7 @@ public class ControllerCommand extends Command {
 		
 		int maxDBConnectionCount = ((JsonPrimitive) val).getAsInt();
 		config.setAppControllerProp("app.max_db_connections_count", maxDBConnectionCount +"");
+		//TODO set number of db connections
 	}
 	
 	/**

@@ -1,4 +1,4 @@
-package com.linkedin.replica.serachEngine.Exceptions;
+package com.linkedin.replica.serachEngine.exceptions;
 
 public class SearchException extends RuntimeException{
 	public SearchException(String message){

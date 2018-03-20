@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.linkedin.replica.serachEngine.database.handlers.DatabaseHandler;
 import com.linkedin.replica.serachEngine.database.handlers.SearchHandler;
+import com.linkedin.replica.serachEngine.exceptions.SearchException;
 /**
  * Command is an abstract class responsible for handling specific request and it communicates between
  * external input and internal functionality implementation
@@ -36,7 +37,7 @@ public abstract class Command {
 	        for(String arg: requiredArgs)
 	            if(!args.containsKey(arg)) {
 	                String exceptionMsg = String.format("Cannot execute command. %s argument is missing", arg);
-	                throw new IllegalArgumentException(exceptionMsg);
+	                throw new SearchException(exceptionMsg);
 	            }
 	    }
 }
