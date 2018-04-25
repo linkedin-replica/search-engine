@@ -17,37 +17,36 @@ public class Configuration {
     private final Properties appConfig = new Properties();
     private final Properties arangoConfig = new Properties();
     private final Properties controllerConfig = new Properties();
+    private final Properties queriesConfig = new Properties();
     
     private String appConfigPath;
     private String arangoConfigPath;
     private String commandsConfigPath;
-    private String controllerConfigPath;
     
     private boolean isAppConfigModified;
     private boolean isArangoConfigModified;
     private boolean isCommandsConfigModified;
-//    private boolean isControllerConfigModified;
 
 	private static Configuration instance;
  	
-	private Configuration(String appConfigPath, String arangoConfigPath, String commandsConfigPath, String controllerConfigPath) throws IOException {
+	private Configuration(String appConfigPath, String arangoConfigPath, String commandsConfigPath, String controllerConfigPath, String queriesFilePath) throws IOException {
         populateWithConfig(appConfigPath, appConfig);
         populateWithConfig(arangoConfigPath, arangoConfig);
         populateWithConfig(commandsConfigPath, commandConfig);
         populateWithConfig(controllerConfigPath, controllerConfig);
+        populateWithConfig(queriesFilePath, queriesConfig);
         
         this.appConfigPath = appConfigPath;
         this.arangoConfigPath = arangoConfigPath;
         this.commandsConfigPath = commandsConfigPath;
-        this.controllerConfigPath = controllerConfigPath;
 	}
 	
 	public static Configuration getInstance() {
 		return instance;
 	}
 
-    public static void init(String appConfigPath, String arangoConfigPath, String commandsConfigPath, String controllerConfigPath) throws IOException {
-        instance = new Configuration(appConfigPath, arangoConfigPath, commandsConfigPath, controllerConfigPath);
+    public static void init(String appConfigPath, String arangoConfigPath, String commandsConfigPath, String controllerConfigPath, String queriesFilePath) throws IOException {
+        instance = new Configuration(appConfigPath, arangoConfigPath, commandsConfigPath, controllerConfigPath, queriesFilePath);
     }
     
     private static void populateWithConfig(String configFilePath, Properties properties) throws IOException {
@@ -82,6 +81,10 @@ public class Configuration {
     
     public String getCommandConfigProp(String key){
     	return commandConfig.getProperty(key);
+    }
+   
+    public String getQuery(String key){
+    	return queriesConfig.getProperty(key);
     }
     
     public void setAppControllerProp(String key, String val){

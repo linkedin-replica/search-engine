@@ -1,0 +1,89 @@
+seed.posts.query= \
+	let posts_seed = [ \
+		{ \
+			"authorId": "12", \
+			"_key" : "1", \
+			"postId": "1", \
+			"isCompanyPost": true, \
+			"text": "How to calculate LCA with LCM?", \
+			"images": \
+				[ \
+					"linkedin.com/111.png", \
+					"linkedin.com/112.png" \
+				], \
+			"videos": [], \
+			"commentsCount": 1, \
+			"timestamp": 1523729163171, \
+			"isArticle": false, \
+			"likers": \
+				[ \
+					"4", \
+					"3" \
+				], \
+			"weight": 10 \
+		}, \
+		{ \
+			"authorId": "12", \
+			"_key" : "2", \
+			"postId": "2", \
+			"isCompanyPost": true, \
+			"text": "How to calculate LCA with LCM?", \
+			"images": \
+				 [ \
+					"linkedin.com/111.png", \
+					"linkedin.com/112.png" \
+				], \
+			"videos": [], \
+			"commentsCount": 1, \
+			"timestamp": 1523470435764, \
+			"isArticle": false, \
+			"likers": \
+				[ \
+					"4", \
+					"3" \
+				], \
+			"weight": 7 \
+		}, \
+		{ \
+			"_key": "3", \
+			"authorId": "2", \
+			"postId": "3", \
+			"isCompanyPost": false, \
+			"text": "Another boring post", \
+			"images": [], \
+			"videos": ["linkedin.com/avideo.com"], \
+			"commentsCount": 0, \
+			"timestamp": 1651334654, \
+			"isArticle": false, \
+			"likers": [] \
+		}, \
+		{ \
+			"_key": "4", \
+			"authorId": "2", \
+			"postId": "4", \
+			"isCompanyPost": false, \
+			"text": "Another boring article", \
+			"images": [], \
+			"videos": ["linkedin.com/avideo.com"], \
+			"commentsCount": 29, \
+			"timestamp": 1651334654, \
+			"isArticle": true, \
+			"likers": ["1", "2", "3"], \
+			"title": "First Article Title" \
+		}, \
+		{ \
+			"_key": "5", \
+			"authorId": "1", \
+			"postId": "5", \
+			"isCompanyPost": false, \
+			"text": "Another boring article", \
+			"images": [], \
+			"videos": ["linkedin.com/avideo.com"], \
+			"commentsCount": 239, \
+			"timestamp": 1651334654, \
+			"isArticle": true, \
+			"likers": ["1", "2"], \
+			"title": "Second Article Title" \
+		} \
+	] \
+	for post in posts_seed insert post in posts

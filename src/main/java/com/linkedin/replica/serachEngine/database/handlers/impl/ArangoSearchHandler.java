@@ -13,132 +13,105 @@ import com.arangodb.util.MapBuilder;
 import com.linkedin.replica.serachEngine.config.Configuration;
 import com.linkedin.replica.serachEngine.database.DatabaseConnection;
 import com.linkedin.replica.serachEngine.database.handlers.SearchHandler;
-import com.linkedin.replica.serachEngine.models.Company;
 import com.linkedin.replica.serachEngine.models.Job;
 import com.linkedin.replica.serachEngine.models.User;
 import com.linkedin.replica.serachEngine.models.Post;
 
 /**
- * Implementation of ArangoHandler which is responsible for serving specific request from ArangoDB
+ * Implementation of ArangoHandler which is responsible for serving specific
+ * request from ArangoDB
  */
-public class ArangoSearchHandler implements SearchHandler{
+public class ArangoSearchHandler implements SearchHandler {
 	private ArangoDB arangoDB;
 	private String dbName;
-	
+
+	private final Configuration config = Configuration.getInstance();
+
 	public ArangoSearchHandler() throws FileNotFoundException, ClassNotFoundException, IOException, SQLException {
 		arangoDB = DatabaseConnection.getInstance().getArangodb();
 		dbName = Configuration.getInstance().getArangoConfigProp("db.name");
 	}
-	
+
 	/**
-	 * Search for users 
-	 * @return
-	 * 	return list of users
+	 * Search for users
+	 * 
+	 * @return return list of users
 	 */
-	public List<User> searchUsers(String name) {
-		String collectionName = Configuration.getInstance().getArangoConfigProp("collection.users.name");	
-		
+	public List<User> searchUsers(String searchKey) {
 		// lowerCase name to avoid case sensitive search
-		name = name.toLowerCase();
-		
-		// query for getting user if there is a match of his/her firstName or lastName with input
-		String query = "FOR t IN "+ collectionName +" FILTER "
-				+ "LOWER(t.firstName) LIKE @name || "
-				+ "LOWER(t.lastName) LIKE  @name "
-				+ "RETURN t";
-		
+		searchKey = searchKey.toLowerCase();
+
+		// get query from queries configuration file
+		String query = config.getQuery("search.users.query");
+
 		// bind variables in query
-		Map<String, Object> bindVars = new MapBuilder().put("name", "%"+name+"%").get();
-		
+		Map<String, Object> bindVars = new MapBuilder().put("searchKey", searchKey).get();
+
 		// execute query
 		ArangoCursor<User> cursor = arangoDB.db(dbName).query(query, bindVars, null, User.class);
-
+		
 		// add results to result list and return it
 		ArrayList<User> result = new ArrayList<User>();
-		cursor.forEachRemaining( user -> { result.add(user); });
+		cursor.forEachRemaining(user -> {
+			result.add(user);
+		});
+
 		return result;
 	}
-	
+
 	/**
-	 * Search for companies 
-	 * @return
-	 * 	return list of companies
+	 * Search for posts
+	 * 
+	 * @return return list of posts
 	 */
-	public List<Company> searchCompanies(String name) {
-		String collectionName = Configuration.getInstance().getArangoConfigProp("collection.companies.name");	
-		
+	public List<Post> searchPosts(String searchKey, String userId) {
 		// lowerCase name to avoid case sensitive search
-		name = name.toLowerCase();
-		
-		// query for getting company if there is a match of its companyName with input
-		String query = "FOR t IN "+ collectionName +" FILTER "
-				+ "LOWER(t.companyName) LIKE @name "
-				+ "RETURN t";
-		
-		// bind variables in query
-		Map<String, Object> bindVars = new MapBuilder().put("name", "%"+name+"%").get();
+		searchKey = searchKey.toLowerCase();
 
-		// execute query
-		ArangoCursor<Company> cursor = arangoDB.db(dbName).query(query, bindVars, null, Company.class);
-		// add results to result list and return it
-		ArrayList<Company> result = new ArrayList<Company>();
-		cursor.forEachRemaining( company -> { result.add(company); });
-		return result;
-	}
-	
-	/**
-	 * Search for posts 
-	 * @return
-	 * 	return list of posts
-	 */
-	public List<Post> searchPosts(String txt) {
-		String collectionName = Configuration.getInstance().getArangoConfigProp("collection.posts.name");	
-
-		// lowerCase name to avoid case sensitive search
-		txt = txt.toLowerCase();
-
-		// query for getting user if there is a match of his/her firstName or lastName with input
-		String query = "FOR t IN "+ collectionName +" FILTER "
-				+ "LOWER(t.text) LIKE @txt "
-				+ "RETURN t";
+		// get query from queries configuration file
+		String query = config.getQuery("search.posts.query");
 
 		// bind variables in query
-		Map<String, Object> bindVars = new MapBuilder().put("txt", "%"+txt+"%").get();
+		Map<String, Object> bindVars = new MapBuilder().get();
+		bindVars.put("searchKey", searchKey);
+		bindVars.put("userId", userId);
 
 		// execute query
 		ArangoCursor<Post> cursor = arangoDB.db(dbName).query(query, bindVars, null, Post.class);
 
 		// add results to result list and return it
 		ArrayList<Post> result = new ArrayList<Post>();
-		cursor.forEachRemaining( post -> { result.add(post); });
+		cursor.forEachRemaining(post -> {
+			result.add(post);
+		});
+
 		return result;
 	}
-	
+
 	/**
-	 * Search for jobs 
-	 * @return
-	 * 	return list of jobs
+	 * Search for jobs
+	 * 
+	 * @return return list of jobs
 	 */
-	public List<Job> searchJobs(String title) {
-		String collectionName = Configuration.getInstance().getArangoConfigProp("collection.jobs.name");	
-		
+	public List<Job> searchJobs(String searchKey) {
 		// lowerCase name to avoid case sensitive search
-		title = title.toLowerCase();
-		
-		// query for getting user if there is a match of his/her firstName or lastName with input
-		String query = "FOR t IN "+ collectionName +" FILTER "
-				+ "LOWER(t.title) LIKE @title "
-				+ "RETURN t";
+		searchKey = searchKey.toLowerCase();
+
+		// get query from queries configuration file
+		String query = config.getQuery("search.jobs.query");
 
 		// bind variables in query
-		Map<String, Object> bindVars = new MapBuilder().put("title", "%"+title+"%").get();
+		Map<String, Object> bindVars = new MapBuilder().put("searchKey", searchKey).get();
 
 		// execute query
 		ArangoCursor<Job> cursor = arangoDB.db(dbName).query(query, bindVars, null, Job.class);
-        
-        // add results to result list and return it
+
+		// add results to result list and return it
 		ArrayList<Job> result = new ArrayList<Job>();
-		cursor.forEachRemaining( job -> { result.add(job); });
+		cursor.forEachRemaining(job -> {
+			result.add(job);
+		});
+
 		return result;
-	}	
+	}
 }

@@ -2,7 +2,6 @@ package com.linkedin.replica.serachEngine.database.handlers;
 
 import java.util.List;
 
-import com.linkedin.replica.serachEngine.models.Company;
 import com.linkedin.replica.serachEngine.models.Job;
 import com.linkedin.replica.serachEngine.models.User;
 import com.linkedin.replica.serachEngine.models.Post;
@@ -17,26 +16,19 @@ public interface SearchHandler extends DatabaseHandler{
 	 * @return
 	 * 	return list of users
 	 */
-	public List<User> searchUsers(String name);
-	
-	/**
-	 * Search for companies 
-	 * @return
-	 * 	return list of companies
-	 */
-	public List<Company> searchCompanies(String name);
+	public List<User> searchUsers(String searchKey);
 	
 	/**
 	 * Search for posts 
 	 * @return
 	 * 	return list of posts
 	 */
-	public List<Post> searchPosts(String txt);
+	public List<Post> searchPosts(String searchKey, String userId);
 	
 	/**
 	 * Search for jobs 
 	 * @return
 	 * 	return list of jobs
 	 */
-	public List<Job> searchJobs(String title);
+	public List<Job> searchJobs(String searchKey);
 }
