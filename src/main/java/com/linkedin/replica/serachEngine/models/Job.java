@@ -1,45 +1,72 @@
 package com.linkedin.replica.serachEngine.models;
 
+import java.util.ArrayList;
+
 /**
  * Job Model
  */
 public class Job {
-	private String _key;
+	private String jobId;
+	private String jobTitle;
 	private String industryType;
 	private String jobBrief;
-	private String title;
-	
-	public Job(){}
-	
-	public String get_key() {
-		return _key;
+	private String companyId;
+	private ArrayList<String> requiredSkills;
+	private String companyName;
+	private String profilePictureUrl;
+
+	public Job() {
 	}
 
-	public void set_key(String _key) {
-		this._key = _key;
+	public String getJobId() {
+		return jobId;
+	}
+
+	public String getJobTitle() {
+		return jobTitle;
 	}
 
 	public String getIndustryType() {
 		return industryType;
 	}
 
-	public void setIndustryType(String industryType) {
-		this.industryType = industryType;
-	}
-
 	public String getJobBrief() {
 		return jobBrief;
 	}
 
-	public void setJobBrief(String jobBrief) {
-		this.jobBrief = jobBrief;
+	public String getCompanyId() {
+		return companyId;
 	}
 
-	public String getTitle() {
-		return title;
+	public ArrayList<String> getRequiredSkills() {
+		return requiredSkills;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public String getProfilePictureUrl() {
+		return profilePictureUrl;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(! (obj instanceof Job))
+			return false;
+		
+		Job job = (Job) obj;
+		
+		if(this.jobId != null && !this.jobId.equals(job.getJobId()))
+			return false;
+		
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Job [jobId=" + jobId + ", jobTitle=" + jobTitle + ", industryType=" + industryType + ", jobBrief="
+				+ jobBrief + ", companyId=" + companyId + ", requiredSkills=" + requiredSkills + ", companyName="
+				+ companyName + ", profilePictureUrl=" + profilePictureUrl + "]";
 	}
 }

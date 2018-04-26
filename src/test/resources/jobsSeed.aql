@@ -1,0 +1,31 @@
+seed.jobs.query= \
+	let jobs_seed = [ \
+		{ \
+			"_key": "1", \
+			"jobId": "1", \
+			"jobTitle": "Software Engineer", \
+			"industryType": "Software", \
+			"jobBrief" : "Bla bla bla", \
+			"companyId" : "11", \
+			"requiredSkills":["gamed gddan", "SQL", "JAVA"] \
+		}, \
+		{ \
+			"_key": "2", \
+			"jobId": "2", \
+			"jobTitle": "Software Engineer II", \
+			"industryType": "Medicine", \
+			"jobBrief" : "Bla bla blaaaaaaa", \
+			"companyId" : "12", \
+			"requiredSkills":["Sociable", "7enayyen"] \
+		}, \
+		{ \
+			"_key": "3", \
+			"jobId": "3", \
+			"jobTitle": "Doctor", \
+			"industryType": "Education", \
+			"jobBrief" : "GUC", \
+			"companyId" : "13", \
+			 "requiredSkills":["skill"] \
+		} \
+	] \
+	for job in jobs_seed insert job in jobs

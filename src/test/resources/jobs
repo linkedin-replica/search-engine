@@ -1,17 +1,30 @@
-Php Developer
-IT Manager
-Node Developer
-Communication Engineer
-Software Engineer
-Project Manager
-Front End Developer
-Driver
-Photographer
-HR
-Consultant
-Software Intern
-Senior Mobile Developer
-IT Engineer
-Senior Android Developer
-Data Analyst
-Research Engineer
+1= \
+	{ \
+        "_key": "1", \
+        "jobId": "1", \
+        "jobTitle": "Software Engineer", \
+        "industryType": "Software", \
+        "jobBrief" : "Bla bla bla", \
+        "companyId" : "11", \
+        "requiredSkills":["gamed gddan", "SQL", "JAVA"] \
+    }
+2= \
+    { \
+        "_key": "2", \
+        "jobId": "2", \
+        "jobTitle": "Software Engineer II", \
+        "industryType": "Medicine", \
+        "jobBrief" : "Bla bla blaaaaaaa", \
+        "companyId" : "12", \
+        "requiredSkills":["Sociable", "7enayyen"] \
+    }
+3= \
+    { \
+        "_key": "3", \
+        "jobId": "3", \
+        "jobTitle": "Doctor", \
+        "industryType": "Education", \
+        "jobBrief" : "GUC", \
+        "companyId" : "13", \
+        "requiredSkills":["skill"] \
+    }

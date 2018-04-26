@@ -1,0 +1,159 @@
+seed.users.query= \
+	let users_seed = [ \
+	    { \
+	        "_key": "1", \
+	        "userId": "1", \
+	        "firstName": "Ahmed", \
+	        "lastName": "Mohamed", \
+	        "headline": "Software Engineer at Goofle", \
+	        "industry": "Computer Science", \
+	        "positions": [ \
+	            { \
+	                "title": "Software Engineer", \
+	                "companyId": "11", \
+	                "startDate": 12321321313, \
+	                "isCurrent": true \
+	            }, \
+	            { \
+	                "title": "Software Engineering Intern", \
+	                "companyId": "12", \
+	                "startDate": 13421321313, \
+	                "endDate": 14021321313 \
+	            } \
+	        ], \
+	        "education": [ \
+	            { \
+	                "schoolName": "German University in Cairo", \
+	                "fieldOfStudy": "Computer Science", \
+	                "degree": "Bachelor", \
+	                "startDate": 123213213, \
+	                "isCurrent": true \
+	            }, \
+	            { \
+	                "schoolName": "MSA school", \
+	                "degree": "Highschool", \
+	                "startDate": 121213213, \
+	                "endDate": 122213213 \
+	            } \
+	        ], \
+	        "profilePictureUrl": "linkedin.com/1.png", \
+	        "cvUrl": "linkedin.com/1.pdf", \
+	        "skills": ["Hard worker", "Work under pressure"], \
+	        "friendsList": ["2", "3", "4"], \
+	        "followedCompanies": ["11", "12", "13"], \
+	        "bookmarkedPosts": ["1", "2", "3"] \
+	    }, \
+	    { \
+	        "_key": "2", \
+	        "userId": "2", \
+	        "firstName": "Mostafa", \
+	        "lastName": "Karim", \
+	        "headline": "Software Engineer at Faceboom", \
+	        "industry": "Computer Science", \
+	        "positions": [ \
+	            { \
+	                "title": "Software Engineer", \
+	                "companyId": "12", \
+	                "startDate": 12381321313, \
+	                "isCurrent": true \
+	            }, \
+	            { \
+	                "title": "Software Engineering Intern", \
+	                "companyId": "11", \
+	                "startDate": 13421321313, \
+	                "endDate": 14021321313 \
+	            } \
+	        ], \
+	        "education": [ \
+	            { \
+	                "schoolName": "Ain shams university", \
+	                "fieldOfStudy": "Computer Science", \
+	                "degree": "Bachelor", \
+	                "startDate": 123213213, \
+	                "isCurrent": true \
+	            }, \
+	            { \
+	                "schoolName": "Masha2allah School", \
+	                "degree": "Highschool", \
+	                "startDate": 121213213, \
+	                "endDate": 122213213 \
+	            } \
+	        ], \
+	        "profilePictureUrl": "linkedin.com/2.png", \
+	        "cvUrl": "linkedin.com/2.pdf", \
+	        "skills": ["Intelligent", "Gamed"], \
+	        "friendsList": ["1", "3"], \
+	        "followedCompanies": ["11", "12"], \
+	        "bookmarkedPosts": ["3"] \
+	    }, \
+	    { \
+	        "_key": "3", \
+	        "userId": "3", \
+	        "firstName": "Hatem", \
+	        "lastName": "Morgan", \
+	        "headline": "Software Engineer", \
+	        "industry": "Computer Science", \
+	        "positions": [ \
+	            { \
+	                "title": "Software Engineer", \
+	                "companyId": "13", \
+	                "startDate": 12281321313, \
+	                "isCurrent": true \
+	            } \
+	        ], \
+	        "education": [ \
+	            { \
+	                "schoolName": "German University in Cairo", \
+	                "fieldOfStudy": "Computer Science", \
+	                "degree": "Bachelor", \
+	                "startDate": 123213213, \
+	                "isCurrent": true \
+	            } \
+	        ], \
+	        "profilePictureUrl": "linkedin.com/3.png", \
+	        "cvUrl": "linkedin.com/3.pdf", \
+	        "skills": ["Able to do DFS with sieve"], \
+	        "friendsList": ["1", "2"], \
+	        "followedCompanies": [], \
+	        "bookmarkedPosts": [] \
+	    }, \
+	    { \
+	        "_key": "4", \
+	        "userId": "4", \
+	        "firstName": "Ahmed", \
+	        "lastName": "Soliman", \
+	        "headline": "Brens el data science", \
+	        "industry": "Computer Science", \
+	        "positions": [ \
+	            { \
+	                "title": "Data Wrangllling Engineer", \
+	                "companyId": "14", \
+	                "startDate": 12381321313, \
+	                "isCurrent": true \
+	            }, \
+	            { \
+	                "title": "Software Engineering Intern", \
+	                "companyId": "11", \
+	                "startDate": 13421321313, \
+	                "endDate": 14021321313 \
+	            } \
+	        ], \
+	        "education": [ \
+	            { \
+	                "schoolName": "German University in Cairo", \
+	                "fieldOfStudy": "Computer Science", \
+	                "degree": "Bachelor", \
+	                "startDate": 123213213, \
+	                "isCurrent": true \
+	            } \
+	        ], \
+	        "profilePictureUrl": "linkedin.com/4.png", \
+	        "cvUrl": "linkedin.com/4.pdf", \
+	        "skills": [], \
+	        "friendsList": ["5"], \
+	        "followedCompanies": ["12"], \
+	        "bookmarkedPosts": ["2"] \
+	    } \
+	] \
+	 \
+	for u in users_seed insert u in users \

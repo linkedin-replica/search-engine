@@ -9,7 +9,7 @@ import com.linkedin.replica.serachEngine.database.handlers.SearchHandler;
 import com.linkedin.replica.serachEngine.models.Job;
 
 /**
- *  Implementation of command design patterns for search for jobs functionality
+ * Implementation of command design patterns for search for jobs functionality
  */
 public class SearchJobsCommand extends Command {
 
@@ -21,12 +21,11 @@ public class SearchJobsCommand extends Command {
 	public Object execute() {
 		// get database handler that implements functionality of this command
 		SearchHandler dbHandler = (SearchHandler) this.dbHandler;
-		
-        // validate that all required arguments that are passed
-		validateArgs(new String[]{"searchKey"});
-		
-		// call dbHandler to get list of jobs from db 
-		List<Job> jobs = dbHandler.searchJobs(args.get("searchKey").toString());
-		return jobs;
+
+		// validate that all required arguments that are passed
+		validateArgs(new String[] { "searchKey" });
+
+		// call dbHandler to get list of jobs from db
+		return dbHandler.searchJobs(args.get("searchKey").toString());
 	}
 }

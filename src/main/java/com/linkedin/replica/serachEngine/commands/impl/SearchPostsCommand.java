@@ -9,9 +9,9 @@ import com.linkedin.replica.serachEngine.database.handlers.SearchHandler;
 import com.linkedin.replica.serachEngine.models.Post;
 
 /**
- *  Implementation of command design patterns for search for posts functionality
+ * Implementation of command design patterns for search for posts functionality
  */
-public class SearchPostsCommand extends Command{
+public class SearchPostsCommand extends Command {
 
 	public SearchPostsCommand(HashMap<String, Object> args, DatabaseHandler dbHandler) {
 		super(args, dbHandler);
@@ -21,12 +21,12 @@ public class SearchPostsCommand extends Command{
 	public Object execute() {
 		// get database handler that implements functionality of this command
 		SearchHandler dbHandler = (SearchHandler) this.dbHandler;
-		
-        // validate that all required arguments that are passed
-		validateArgs(new String[]{"searchKey"});
-		
+
+		// validate that all required arguments that are passed
+		validateArgs(new String[] { "searchKey", "userId" });
+
 		// call dbHandler to get list of posts in db
-		List<Post> posts = dbHandler.searchPosts(args.get("searchKey").toString());
+		List<Post> posts = dbHandler.searchPosts(args.get("searchKey").toString(), args.get("userId").toString());
 		return posts;
 	}
 }

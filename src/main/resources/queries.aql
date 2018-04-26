@@ -1,0 +1,55 @@
+search.jobs.query= \
+	FOR job IN jobs \
+		FOR company IN companies \
+			FILTER job.companyId == company.companyId AND \
+				(LOWER(job.title) LIKE concat("%", @searchKey, "%") \
+					OR LOWER(job.industryType) LIKE concat("%", @searchKey, "%") \
+					OR LOWER(company.companyName) == @searchKey) \
+			RETURN MERGE_RECURSIVE \
+			( \
+				job, \
+				{ \
+					"companyName" : company.companyName, \
+					"companyPicture" : company.companyPicture \
+				} \
+			)
+
+search.users.query= \
+	FOR user IN users \
+		FILTER LOWER(user.firstName) LIKE concat("%", @searchKey, "%") \
+			OR LOWER(user.lastName) LIKE concat("%", @searchKey, "%") \
+	RETURN user
+	
+search.posts.query= \
+	FOR post IN posts \
+		FILTER LOWER(post.text) LIKE concat("%", @searchKey, "%") \
+		LET likers = \
+			( \
+				FOR liker IN users \
+					FILTER liker.userId IN post.likers \
+					RETURN \
+					{ \
+						"likerId" : liker.userId, \
+						"likerName" : concat(liker.firstName, " ", liker.lastName), \
+						"likerProfilePictureUrl" : liker.profilePictureUrl \
+					} \
+			) \
+		FOR author in users \
+			FILTER author.userId == post.authorId \
+			RETURN \
+			{ \
+				"authorName" : concat(author.firstName, " " , author.lastName), \
+				"authorProfilePictureUrl" : author.profilePictureUrl, \
+				"headline" : author.headline, \
+				"authorId": post.authorId, \
+				"postId" : post.postId, \
+				"title" : post.title, \
+				"text" : post.text, \
+				"images" : post.images, \
+				"videos" : post.videos, \
+				"commentsCount" : post.commentsCount, \
+				"timestamp" : post.timestamp, \
+				"isCompanyPost" : post.isCompanyPost, \
+				"likers" : likers, \
+				"liked" : @userId in post.likers \
+			}
