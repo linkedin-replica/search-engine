@@ -4,7 +4,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import com.arangodb.ArangoDB;
@@ -80,28 +85,28 @@ public class DatabaseSeed {
 	}
 	
 	public static void main(String[] args) throws IOException {
-//		List<String> lines = Files.readAllLines(Paths.get("src/test/resources/jobs.txt"));
-//		List<String> newLines = new ArrayList<String>();
-//		
-//		int i=1;
-//		boolean isNewObj = true;
-//		for(String line : lines){
-//			if(isNewObj && line.trim().equals("{")){
-//				newLines.add(i++ +"= \\"); 
-//				isNewObj = false;
-//			}
-//			if(line.trim().equals("}==")){
-//				newLines.add(line.replaceAll("=", "")); 
-//				isNewObj = true;
-//			}
-//			else
-//				newLines.add(line+" \\"); 
-//		}
-//		Files.write(Paths.get("src/test/resources/posts"), newLines, StandardOpenOption.CREATE_NEW);
+		List<String> lines = Files.readAllLines(Paths.get("src/test/resources/test"));
+		List<String> newLines = new ArrayList<String>();
 		
-		Properties properties = new Properties();
-		properties.load(new FileInputStream(new File("src/test/resources/posts")));
-		System.out.println(properties.getProperty("1"));
-		System.out.println(new Gson().fromJson(properties.getProperty("1"), Post.class));
+		int i=1;
+		boolean isNewObj = true;
+		for(String line : lines){
+			if(isNewObj && line.trim().equals("{")){
+				newLines.add(i++ +"= \\"); 
+				isNewObj = false;
+			}
+			if(line.trim().equals("}==")){
+				newLines.add(line.replaceAll("=", "")); 
+				isNewObj = true;
+			}
+			else
+				newLines.add(line+" \\"); 
+		}
+		Files.write(Paths.get("src/test/resources/out"), newLines, StandardOpenOption.CREATE_NEW);
+		
+//		Properties properties = new Properties();
+//		properties.load(new FileInputStream(new File("src/test/resources/posts")));
+//		System.out.println(properties.getProperty("1"));
+//		System.out.println(new Gson().fromJson(properties.getProperty("1"), Post.class));
 	}
 }

@@ -11,41 +11,39 @@ import com.linkedin.replica.serachEngine.config.Configuration;
 import com.linkedin.replica.serachEngine.exceptions.SearchException;
 
 public class ControllerService {
-	public static void serve(JsonObject body) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException{
+	public static void serve(JsonObject body) throws NoSuchMethodException, SecurityException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException, IOException {
 		// iterate over request JSON body
 		Iterator<?> keySetIter = body.keySet().iterator();
 		String key, methodName;
 		HashMap<String, Object> args = new HashMap<String, Object>();
 		ControllerCommand controllerCommand = new ControllerCommand(args);
-
-		while(keySetIter.hasNext()){
+		while (keySetIter.hasNext()) {
 			key = keySetIter.next().toString();
 			methodName = getControllerServiceMethodName(key);
-			
 			args.put("methodName", methodName);
 			args.put("param", body.get(key));
 			controllerCommand.execute();
 		}
-		
+
 		// write any changes to configuration files
 		Configuration.getInstance().commit();
 	}
-	
+
 	/**
 	 * Maps requestBodykey to actual method name in controllerService class
 	 * 
 	 * @param requestBodykey
-	 * 	key in JSON body. eg. setMaxThreadCount
-	 * @return
-	 * 	ControllerService method name
+	 *            key in JSON body. eg. setMaxThreadCount
+	 * @return ControllerService method name
 	 */
-	public static String getControllerServiceMethodName(String requestBodykey){
+	public static String getControllerServiceMethodName(String requestBodykey) {
 		Configuration config = Configuration.getInstance();
 		// get mapping configuration key
-		String key = config.getControllerConfigProp("controller.request.body."+requestBodykey.toLowerCase());
-		if(key == null)
+		String key = config.getControllerConfigProp("controller.request.body." + requestBodykey.toLowerCase());
+		if (key == null)
 			throw new SearchException(String.format("Invalid key: %s", requestBodykey));
-		
+
 		// ControllerService method name
 		return config.getControllerConfigProp(key);
 	}
