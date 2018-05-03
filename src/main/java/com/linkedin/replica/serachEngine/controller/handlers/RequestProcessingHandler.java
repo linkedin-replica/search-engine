@@ -18,7 +18,7 @@ public class RequestProcessingHandler extends ChannelInboundHandlerAdapter{
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		// JSONObject body that was decoded by RequestDecoderHandler
 		JsonObject body = (JsonObject) msg;
-
+		
 		// pass body to ControllerService to serve the request
 		ControllerService.serve(body);
 

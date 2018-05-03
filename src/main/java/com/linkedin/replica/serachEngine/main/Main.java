@@ -49,7 +49,7 @@ public class Main {
 		// with databases
 		DatabaseConnection.init();
 		// start RabbitMQ
-		new MessageReceiver();
+		MessageReceiver.init();
 		// start server
 		new Thread(new Runnable() {
 
