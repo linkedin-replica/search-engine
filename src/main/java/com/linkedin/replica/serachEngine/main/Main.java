@@ -70,7 +70,7 @@ public class Main {
 
 	public static void main(String[] args) throws FileNotFoundException, ClassNotFoundException, IOException,
 			SQLException, InterruptedException, TimeoutException {
-		String[] arr = { "src/main/resources/app.config", "src/main/resources/arango.test.config",
+		String[] arr = { "src/main/resources/app.config", "src/main/resources/arango.config",
 				"src/main/resources/commands.config", "src/main/resources/controller.config",
 				"src/main/resources/queries.aql" };
 		start(arr);
