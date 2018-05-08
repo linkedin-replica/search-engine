@@ -18,7 +18,6 @@ public class MessageReceiver {
 	private final Configuration configuration = Configuration.getInstance();
 	private final String QUEUE_NAME = configuration.getAppConfigProp("rabbitmq.queue.name");
 	private final String RABBIT_MQ_IP = configuration.getAppConfigProp("rabbitmq.ip");
-
 	private ConnectionFactory factory;
 	private Channel channel;
 	private Connection connection;
@@ -29,6 +28,8 @@ public class MessageReceiver {
 	private MessageReceiver() throws IOException, TimeoutException {
 		factory = new ConnectionFactory();
 		factory.setHost(RABBIT_MQ_IP);
+		factory.setUsername(configuration.getAppConfigProp("rabbitmq.username"));
+		factory.setPassword(configuration.getAppConfigProp("rabbitmq.password"));
 		connection = factory.newConnection();
 		openChannel();
 	}
