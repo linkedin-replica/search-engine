@@ -53,3 +53,12 @@ search.posts.query= \
 				"likers" : likers, \
 				"liked" : @userId in post.likers \
 			}
+search.companies.query=\
+		FOR company IN companies \
+			FILTER LOWER(company.companyName) LIKE concat("%", @searchKey, "%") \
+		    RETURN \
+		    { \
+		        "companyId": company._key, \
+		        "companyName" : company.companyName, \
+		        "profilePictureUrl" : company.profilePictureUrl \
+		    }			
